@@ -3,7 +3,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/button.types';
-import { HubSpeedDialItemComponent } from './speed-dial-item/speed-dial-item.component';
 
 /**
  * FAB that expands a stack of HubSpeedDialItemComponent children on click or hover.
@@ -13,7 +12,6 @@ import { HubSpeedDialItemComponent } from './speed-dial-item/speed-dial-item.com
 @Component({
 	selector: 'hub-speed-dial',
 	standalone: true,
-	imports: [HubSpeedDialItemComponent],
 	templateUrl: './speed-dial.component.html',
 	styleUrl: './speed-dial.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
