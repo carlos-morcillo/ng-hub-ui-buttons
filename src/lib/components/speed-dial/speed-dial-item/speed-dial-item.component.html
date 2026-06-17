@@ -1,0 +1,14 @@
+<div class="hub-speed-dial-item">
+	@if (label()) {
+		<span class="hub-speed-dial-item__label">{{ label() }}</span>
+	}
+	<button
+		class="hub-speed-dial-item__btn"
+		[class]="'hub-speed-dial-item__btn--' + color()"
+		[disabled]="disabled() || null"
+		(click)="itemClick.emit()"
+		type="button"
+		[attr.aria-label]="label() || icon()">
+		{{ icon() }}
+	</button>
+</div>

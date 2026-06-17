@@ -1,0 +1,79 @@
+:where(.hub-speed-dial) {
+	--hub-speed-dial-gap: 0.625rem;
+	--hub-speed-dial-z-index: 1030;
+	--hub-speed-dial-animation: 0.2s ease;
+}
+
+.hub-speed-dial {
+	position: fixed;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	gap: var(--hub-speed-dial-gap);
+	z-index: var(--hub-speed-dial-z-index);
+
+	&__actions {
+		display: flex;
+		flex-direction: column-reverse;
+		align-items: center;
+		gap: var(--hub-speed-dial-gap);
+		animation: hub-sd-fade-in var(--hub-speed-dial-animation) both;
+	}
+}
+
+// Position classes (mirror FAB grid)
+.hub-speed-dial-top-start {
+	inset-block-start: 1rem;
+	inset-inline-start: 1rem;
+	flex-direction: column;
+}
+
+.hub-speed-dial-top-end {
+	inset-block-start: 1rem;
+	inset-inline-end: 1rem;
+	flex-direction: column;
+}
+
+.hub-speed-dial-bottom-start {
+	inset-block-end: 1rem;
+	inset-inline-start: 1rem;
+}
+
+.hub-speed-dial-bottom-end {
+	inset-block-end: 1rem;
+	inset-inline-end: 1rem;
+}
+
+.hub-speed-dial-center {
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	transform: translate(-50%, -50%);
+}
+
+// Direction: horizontal
+.hub-speed-dial-left {
+	flex-direction: row-reverse;
+
+	.hub-speed-dial__actions {
+		flex-direction: row-reverse;
+	}
+}
+
+.hub-speed-dial-right {
+	flex-direction: row;
+
+	.hub-speed-dial__actions {
+		flex-direction: row;
+	}
+}
+
+@keyframes hub-sd-fade-in {
+	from {
+		opacity: 0;
+		transform: translateY(8px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

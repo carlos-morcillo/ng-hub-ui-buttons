@@ -1,0 +1,17 @@
+@if (isOpen()) {
+	<div class="hub-speed-dial__actions" [attr.data-direction]="direction()">
+		<ng-content></ng-content>
+	</div>
+}
+
+<button
+	class="hub-fab"
+	[class]="'hub-fab-' + color() + ' hub-fab-' + size()"
+	(click)="trigger() === 'click' && toggle()"
+	(mouseenter)="trigger() === 'hover' && open()"
+	(mouseleave)="trigger() === 'hover' && close()"
+	type="button"
+	[attr.aria-expanded]="isOpen()"
+	aria-haspopup="true">
+	<ng-content select="[slot=trigger]"></ng-content>
+</button>
