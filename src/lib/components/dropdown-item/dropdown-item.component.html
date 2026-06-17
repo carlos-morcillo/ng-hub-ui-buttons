@@ -1,0 +1,13 @@
+<button
+	class="hub-dropdown-item__inner"
+	type="button"
+	[disabled]="disabled() || null"
+	(click)="_handleClick()">
+	@if (icon()) {
+		<span class="hub-dropdown-item__icon" aria-hidden="true">{{ icon() }}</span>
+	}
+	<span class="hub-dropdown-item__label"><ng-content></ng-content></span>
+	@if (selected()) {
+		<span class="hub-dropdown-item__check" aria-hidden="true">✓</span>
+	}
+</button>

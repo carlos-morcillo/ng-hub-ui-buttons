@@ -1,0 +1,32 @@
+// ── Token defaults ────────────────────────────────────────────────────────
+:where(.hub-dropdown-panel) {
+	--hub-dropdown-panel-min-width: 11.25rem;
+	--hub-dropdown-panel-max-height: 20rem;
+	--hub-dropdown-panel-padding-y: 0.25rem;
+	--hub-dropdown-panel-bg: var(--hub-sys-color-surface-default, #fff);
+	--hub-dropdown-panel-border-color: var(--hub-sys-color-border-subtle, #e2e8f0);
+	--hub-dropdown-panel-border-radius: var(--hub-sys-radius-md, 0.5rem);
+	--hub-dropdown-panel-shadow: var(--hub-sys-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
+	--hub-dropdown-panel-z-index: 1000;
+}
+
+.hub-dropdown-panel {
+	min-width: var(--hub-dropdown-panel-min-width);
+	max-height: var(--hub-dropdown-panel-max-height);
+	overflow-y: auto;
+	padding-block: var(--hub-dropdown-panel-padding-y);
+	background: var(--hub-dropdown-panel-bg);
+	border: 1px solid var(--hub-dropdown-panel-border-color);
+	border-radius: var(--hub-dropdown-panel-border-radius);
+	box-shadow: var(--hub-dropdown-panel-shadow);
+	z-index: var(--hub-dropdown-panel-z-index);
+}
+
+// Semantic color top-border accent loop
+$hub-dropdown-panel-types: primary, secondary, success, danger, warning, info;
+
+@each $type in $hub-dropdown-panel-types {
+	.hub-dropdown-panel-#{$type} {
+		border-top: 3px solid var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+	}
+}
