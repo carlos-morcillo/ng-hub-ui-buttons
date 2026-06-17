@@ -1,0 +1,9 @@
+<ng-content select="[slot=icon]"></ng-content>
+
+@if (extended() && !_collapsed()) {
+	<span class="hub-fab__label">
+		<ng-content select="[slot=label]"></ng-content>
+	</span>
+} @else if (!extended()) {
+	<ng-content></ng-content>
+}

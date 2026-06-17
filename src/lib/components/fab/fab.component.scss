@@ -1,0 +1,128 @@
+// ── Token defaults ────────────────────────────────────────────────────────
+:where(.hub-fab) {
+	--hub-fab-size-mini: 2.5rem;
+	--hub-fab-size-standard: 3.5rem;
+	--hub-fab-size-large: 4.5rem;
+	--hub-fab-border-radius: 50%;
+	--hub-fab-shadow: var(--hub-sys-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+	--hub-fab-shadow-hover: var(--hub-sys-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.18));
+	--hub-fab-offset: 1rem;
+	--hub-fab-extended-height: 3.5rem;
+	--hub-fab-extended-radius: 1.75rem;
+	--hub-fab-extended-padding-x: 1.25rem;
+	--hub-fab-transition: box-shadow 0.2s ease, transform 0.15s ease;
+	--hub-fab-z-index: 1030;
+}
+
+// ── Base ──────────────────────────────────────────────────────────────────
+.hub-fab {
+	position: fixed;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--hub-fab-size-standard);
+	height: var(--hub-fab-size-standard);
+	border-radius: var(--hub-fab-border-radius);
+	border: none;
+	cursor: pointer;
+	box-shadow: var(--hub-fab-shadow);
+	z-index: var(--hub-fab-z-index);
+	transition: var(--hub-fab-transition);
+	color: #fff;
+	font-size: 1.4rem;
+
+	&:hover {
+		box-shadow: var(--hub-fab-shadow-hover);
+		transform: translateY(-1px);
+	}
+
+	&.hub-fab-disabled {
+		opacity: 0.45;
+		pointer-events: none;
+	}
+
+	// Extended pill variant
+	&.hub-fab-extended {
+		width: auto;
+		height: var(--hub-fab-extended-height);
+		border-radius: var(--hub-fab-extended-radius);
+		padding-inline: var(--hub-fab-extended-padding-x);
+		gap: 0.5rem;
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+}
+
+// ── Size modifiers ────────────────────────────────────────────────────────
+.hub-fab-mini {
+	width: var(--hub-fab-size-mini);
+	height: var(--hub-fab-size-mini);
+	font-size: 1rem;
+}
+
+.hub-fab-large {
+	width: var(--hub-fab-size-large);
+	height: var(--hub-fab-size-large);
+	font-size: 1.75rem;
+}
+
+// ── Semantic color loop ───────────────────────────────────────────────────
+$hub-fab-types: primary, secondary, success, danger, warning, info;
+
+@each $type in $hub-fab-types {
+	.hub-fab-#{$type} {
+		background: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+		color: var(--hub-sys-color-#{$type}-on-default, #fff);
+	}
+}
+
+// ── 9-position grid (inset logical properties for RTL) ───────────────────
+.hub-fab-top-start {
+	inset-block-start: var(--hub-fab-offset);
+	inset-inline-start: var(--hub-fab-offset);
+}
+
+.hub-fab-top-center {
+	inset-block-start: var(--hub-fab-offset);
+	inset-inline-start: 50%;
+	transform: translateX(-50%);
+}
+
+.hub-fab-top-end {
+	inset-block-start: var(--hub-fab-offset);
+	inset-inline-end: var(--hub-fab-offset);
+}
+
+.hub-fab-middle-start {
+	inset-block-start: 50%;
+	inset-inline-start: var(--hub-fab-offset);
+	transform: translateY(-50%);
+}
+
+.hub-fab-center {
+	inset-block-start: 50%;
+	inset-inline-start: 50%;
+	transform: translate(-50%, -50%);
+}
+
+.hub-fab-middle-end {
+	inset-block-start: 50%;
+	inset-inline-end: var(--hub-fab-offset);
+	transform: translateY(-50%);
+}
+
+.hub-fab-bottom-start {
+	inset-block-end: var(--hub-fab-offset);
+	inset-inline-start: var(--hub-fab-offset);
+}
+
+.hub-fab-bottom-center {
+	inset-block-end: var(--hub-fab-offset);
+	inset-inline-start: 50%;
+	transform: translateX(-50%);
+}
+
+.hub-fab-bottom-end {
+	inset-block-end: var(--hub-fab-offset);
+	inset-inline-end: var(--hub-fab-offset);
+}
