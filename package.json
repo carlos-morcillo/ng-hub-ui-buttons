@@ -1,0 +1,34 @@
+{
+	"name": "ng-hub-ui-buttons",
+	"version": "22.0.0",
+	"description": "Buttons, FAB, Speed Dial and Dropdown directive for Angular, part of the ng-hub-ui ecosystem",
+	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/carlos-morcillo/ng-hub-ui-buttons.git"
+	},
+	"bugs": {
+		"url": "https://github.com/carlos-morcillo/ng-hub-ui-buttons/issues",
+		"email": "carlos.morcillo@me.com"
+	},
+	"homepage": "https://hubui.dev/",
+	"keywords": [
+		"angular",
+		"button",
+		"fab",
+		"dropdown",
+		"speed-dial",
+		"ui-component",
+		"ng-hub-ui",
+		"signals"
+	],
+	"peerDependencies": {
+		"@angular/common": ">=22.0.0",
+		"@angular/core": ">=22.0.0",
+		"ng-hub-ui-utils": ">=22.0.0"
+	},
+	"dependencies": {
+		"tslib": "^2.3.0"
+	},
+	"sideEffects": false
+}
