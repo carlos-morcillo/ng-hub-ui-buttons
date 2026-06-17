@@ -1,0 +1,155 @@
+// ── Token defaults (zero specificity — any consumer rule wins) ────────────
+:where(.hub-btn) {
+	--hub-btn-padding-x: 0.875rem;
+	--hub-btn-padding-y: 0.4375rem;
+	--hub-btn-border-radius: var(--hub-sys-radius-md, 0.375rem);
+	--hub-btn-border-width: 1.5px;
+	--hub-btn-font-size: var(--hub-ref-font-size-base, 1rem);
+	--hub-btn-font-weight: 500;
+	--hub-btn-gap: 0.375rem;
+	--hub-btn-transition: all 0.15s ease;
+	--hub-btn-spinner-size: 0.875em;
+	--hub-btn-disabled-opacity: 0.55;
+}
+
+// ── Base styles ───────────────────────────────────────────────────────────
+.hub-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--hub-btn-gap);
+	padding: var(--hub-btn-padding-y) var(--hub-btn-padding-x);
+	border-radius: var(--hub-btn-border-radius);
+	border: var(--hub-btn-border-width) solid transparent;
+	font-size: var(--hub-btn-font-size);
+	font-weight: var(--hub-btn-font-weight);
+	cursor: pointer;
+	text-decoration: none;
+	transition: var(--hub-btn-transition);
+	user-select: none;
+	white-space: nowrap;
+
+	&.hub-btn-disabled,
+	&:disabled {
+		opacity: var(--hub-btn-disabled-opacity);
+		pointer-events: none;
+	}
+
+	&.hub-btn-loading {
+		pointer-events: none;
+	}
+}
+
+// ── Size modifiers ────────────────────────────────────────────────────────
+.hub-btn-sm {
+	--hub-btn-padding-x: 0.625rem;
+	--hub-btn-padding-y: 0.25rem;
+	--hub-btn-font-size: 0.8125rem;
+	--hub-btn-border-radius: var(--hub-sys-radius-sm, 0.25rem);
+}
+
+.hub-btn-lg {
+	--hub-btn-padding-x: 1.25rem;
+	--hub-btn-padding-y: 0.625rem;
+	--hub-btn-font-size: 1rem;
+}
+
+.hub-btn-xl {
+	--hub-btn-padding-x: 1.75rem;
+	--hub-btn-padding-y: 0.8125rem;
+	--hub-btn-font-size: 1.125rem;
+}
+
+// Icon-only: square aspect ratio
+.hub-btn-icon {
+	--hub-btn-padding-x: var(--hub-btn-padding-y);
+	aspect-ratio: 1;
+}
+
+// ── Spinner ───────────────────────────────────────────────────────────────
+.hub-btn__spinner {
+	display: inline-block;
+	width: var(--hub-btn-spinner-size);
+	height: var(--hub-btn-spinner-size);
+	border: 2px solid #{'color-mix(in srgb, currentColor 30%, transparent)'};
+	border-top-color: currentColor;
+	border-radius: 50%;
+	animation: hub-btn-spin 0.7s linear infinite;
+}
+
+@keyframes hub-btn-spin {
+	to {
+		transform: rotate(360deg);
+	}
+}
+
+// ── Semantic color loops ──────────────────────────────────────────────────
+$hub-btn-types: primary, secondary, success, danger, warning, info;
+
+// SOLID
+@each $type in $hub-btn-types {
+	.hub-btn-solid.hub-btn-#{$type} {
+		background: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+		color: var(--hub-sys-color-#{$type}-on-default, #fff);
+		border-color: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+
+		&:hover:not(:disabled):not(.hub-btn-disabled) {
+			background: var(--hub-sys-color-#{$type}-emphasis);
+			border-color: var(--hub-sys-color-#{$type}-emphasis);
+		}
+	}
+}
+
+// OUTLINE
+@each $type in $hub-btn-types {
+	.hub-btn-outline.hub-btn-#{$type} {
+		background: transparent;
+		color: var(--hub-sys-color-#{$type}-emphasis);
+		border-color: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+
+		&:hover:not(:disabled):not(.hub-btn-disabled) {
+			background: var(--hub-sys-color-#{$type}-subtle);
+		}
+	}
+}
+
+// SOFT (tinted background, no border)
+@each $type in $hub-btn-types {
+	.hub-btn-soft.hub-btn-#{$type} {
+		background: var(--hub-sys-color-#{$type}-subtle);
+		color: var(--hub-sys-color-#{$type}-emphasis);
+		border-color: transparent;
+
+		&:hover:not(:disabled):not(.hub-btn-disabled) {
+			background: color-mix(in srgb, var(--hub-sys-color-#{$type}-subtle) 80%, var(--hub-sys-color-#{$type}-default));
+		}
+	}
+}
+
+// GHOST
+@each $type in $hub-btn-types {
+	.hub-btn-ghost.hub-btn-#{$type} {
+		background: transparent;
+		color: var(--hub-sys-color-#{$type}-emphasis);
+		border-color: transparent;
+
+		&:hover:not(:disabled):not(.hub-btn-disabled) {
+			background: var(--hub-sys-color-#{$type}-subtle);
+		}
+	}
+}
+
+// LINK
+@each $type in $hub-btn-types {
+	.hub-btn-link.hub-btn-#{$type} {
+		background: transparent;
+		color: var(--hub-sys-color-#{$type}-emphasis);
+		border-color: transparent;
+		text-decoration: underline;
+		padding-inline: 0.125rem;
+
+		&:hover:not(:disabled):not(.hub-btn-disabled) {
+			color: var(--hub-sys-color-#{$type}-default);
+		}
+	}
+}
