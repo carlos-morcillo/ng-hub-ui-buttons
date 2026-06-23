@@ -23,8 +23,8 @@
 		"signals"
 	],
 	"peerDependencies": {
-		"@angular/common": ">=22.0.0",
-		"@angular/core": ">=22.0.0",
+		"@angular/common": ">=21.0.0",
+		"@angular/core": ">=21.0.0",
 		"ng-hub-ui-utils": ">=21.0.0"
 	},
 	"dependencies": {
