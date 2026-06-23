@@ -1,57 +1,63 @@
-:where(.hub-speed-dial) {
+:where(:host) {
 	--hub-speed-dial-gap: 0.625rem;
 	--hub-speed-dial-z-index: 1030;
 	--hub-speed-dial-animation: 0.2s ease;
 }
 
-.hub-speed-dial {
+:host {
 	position: fixed;
 	display: flex;
 	flex-direction: column-reverse;
 	align-items: center;
 	gap: var(--hub-speed-dial-gap);
 	z-index: var(--hub-speed-dial-z-index);
+}
 
-	&__actions {
-		display: flex;
-		flex-direction: column-reverse;
-		align-items: center;
-		gap: var(--hub-speed-dial-gap);
-		animation: hub-sd-fade-in var(--hub-speed-dial-animation) both;
-	}
+// Actions list (child element — Angular scopes via _ngcontent)
+.hub-speed-dial__actions {
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	gap: var(--hub-speed-dial-gap);
+	animation: hub-sd-fade-in var(--hub-speed-dial-animation) both;
 }
 
 // Position classes (mirror FAB grid)
-.hub-speed-dial-top-start {
+// align-items matches the anchor side so the trigger stays flush when items expand
+:host(.hub-speed-dial-top-start) {
 	inset-block-start: 1rem;
 	inset-inline-start: 1rem;
 	flex-direction: column;
+	align-items: flex-start;
 }
 
-.hub-speed-dial-top-end {
+:host(.hub-speed-dial-top-end) {
 	inset-block-start: 1rem;
 	inset-inline-end: 1rem;
 	flex-direction: column;
+	align-items: flex-end;
 }
 
-.hub-speed-dial-bottom-start {
+:host(.hub-speed-dial-bottom-start) {
 	inset-block-end: 1rem;
 	inset-inline-start: 1rem;
+	align-items: flex-start;
 }
 
-.hub-speed-dial-bottom-end {
+:host(.hub-speed-dial-bottom-end) {
 	inset-block-end: 1rem;
 	inset-inline-end: 1rem;
+	align-items: flex-end;
 }
 
-.hub-speed-dial-center {
+:host(.hub-speed-dial-center) {
 	inset-block-start: 50%;
 	inset-inline-start: 50%;
 	transform: translate(-50%, -50%);
 }
 
 // Direction: horizontal
-.hub-speed-dial-left {
+:host(.hub-speed-dial-left) {
 	flex-direction: row-reverse;
 
 	.hub-speed-dial__actions {
@@ -59,7 +65,7 @@
 	}
 }
 
-.hub-speed-dial-right {
+:host(.hub-speed-dial-right) {
 	flex-direction: row;
 
 	.hub-speed-dial__actions {

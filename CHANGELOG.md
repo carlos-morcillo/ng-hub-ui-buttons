@@ -1,5 +1,23 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.1.0] - 2026-06-23
+
+### Added
+
+- `HubDropdownDirective`: panel closes automatically on scroll to keep it aligned with the trigger
+- Public SCSS mixin API at `ng-hub-ui-buttons/styles`: `hub-btn-solid-rules`, `hub-btn-outline-rules`, `hub-btn-soft-rules`, `hub-btn-ghost-rules`, `hub-btn-link-rules`, `hub-btn-color-rules`, `hub-fab-color`, `hub-dropdown-panel-color`, `hub-dropdown-item-color` and their `*-rules` variants — lets third-party developers register custom semantic colors without modifying the library
+
+### Changed
+
+- `HubSpeedDialComponent`: trigger slot renamed from `slot="trigger"` to `hubTrigger` attribute
+- `HubSpeedDialItemComponent` and `HubDropdownItemComponent`: `icon` input now expects a CSS class string (e.g. `fa-solid fa-plus`) rendered via `<i [class]="icon()">` instead of raw text content
+- All component styles migrated to `:host` selectors for correct Angular Emulated ViewEncapsulation behavior
+
+### Fixed
+
+- `HubFabComponent`: added `ViewEncapsulation.None`; when nested inside `HubSpeedDialComponent` now uses `position: static` instead of `position: fixed`
+- Speed-dial position variants now include `align-items` so action items expand flush with the trigger button
+
 ## [22.0.0] - 2026-06-17
 
 ### Added

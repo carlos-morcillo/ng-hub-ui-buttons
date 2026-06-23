@@ -1,3 +1,5 @@
+@use '../../styles/fab-mixins' as *;
+
 // ── Token defaults ────────────────────────────────────────────────────────
 :where(.hub-fab) {
 	--hub-fab-size-mini: 2.5rem;
@@ -14,7 +16,7 @@
 	--hub-fab-z-index: 1030;
 }
 
-// ── Base ──────────────────────────────────────────────────────────────────
+// ── Base (hub-fab is on both the component host and the speed-dial inner button) ──
 .hub-fab {
 	position: fixed;
 	display: inline-flex;
@@ -70,13 +72,15 @@
 $hub-fab-types: primary, secondary, success, danger, warning, info;
 
 @each $type in $hub-fab-types {
-	.hub-fab-#{$type} {
-		background: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
-		color: var(--hub-sys-color-#{$type}-on-default, #fff);
-	}
+	@include hub-fab-color($type);
 }
 
 // ── 9-position grid (inset logical properties for RTL) ───────────────────
+// When nested inside hub-speed-dial (which is already position:fixed), override to position:static
+.hub-speed-dial .hub-fab {
+	position: static;
+}
+
 .hub-fab-top-start {
 	inset-block-start: var(--hub-fab-offset);
 	inset-inline-start: var(--hub-fab-offset);

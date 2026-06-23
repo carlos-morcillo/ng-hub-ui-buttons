@@ -1,5 +1,7 @@
+@use '../../styles/dropdown-mixins' as *;
+
 // ── Token defaults ────────────────────────────────────────────────────────
-:where(.hub-dropdown-item) {
+:where(:host) {
 	--hub-dropdown-item-padding-y: 0.4375rem;
 	--hub-dropdown-item-padding-x: 0.875rem;
 	--hub-dropdown-item-hover-bg: var(--hub-sys-color-surface-subtle, #f8fafc);
@@ -7,58 +9,55 @@
 	--hub-dropdown-item-disabled-opacity: 0.45;
 }
 
-.hub-dropdown-item {
+:host {
 	display: block;
+}
 
-	&__inner {
-		display: flex;
-		align-items: center;
-		gap: 0.5rem;
-		width: 100%;
-		padding: var(--hub-dropdown-item-padding-y) var(--hub-dropdown-item-padding-x);
-		border: none;
-		background: transparent;
-		font-size: 0.875rem;
-		color: inherit;
-		cursor: pointer;
-		text-align: start;
-		border-radius: var(--hub-dropdown-item-border-radius);
-		transition: background 0.1s ease;
+// Child elements — Angular scopes via _ngcontent
+.hub-dropdown-item__inner {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	width: 100%;
+	padding: var(--hub-dropdown-item-padding-y) var(--hub-dropdown-item-padding-x);
+	border: none;
+	background: transparent;
+	font-size: 0.875rem;
+	color: inherit;
+	cursor: pointer;
+	text-align: start;
+	border-radius: var(--hub-dropdown-item-border-radius);
+	transition: background 0.1s ease;
 
-		&:hover {
-			background: var(--hub-dropdown-item-hover-bg);
-		}
-
-		&:disabled {
-			opacity: var(--hub-dropdown-item-disabled-opacity);
-			pointer-events: none;
-		}
+	&:hover {
+		background: var(--hub-dropdown-item-hover-bg);
 	}
 
-	&__label {
-		flex: 1;
-	}
-
-	&__check {
-		margin-inline-start: auto;
-	}
-
-	// Disabled host class
-	&.hub-dropdown-item-disabled .hub-dropdown-item__inner {
+	&:disabled {
 		opacity: var(--hub-dropdown-item-disabled-opacity);
 		pointer-events: none;
 	}
+}
+
+.hub-dropdown-item__label {
+	flex: 1;
+}
+
+.hub-dropdown-item__check {
+	margin-inline-start: auto;
+}
+
+// Disabled via host class
+:host(.hub-dropdown-item-disabled) .hub-dropdown-item__inner {
+	opacity: var(--hub-dropdown-item-disabled-opacity);
+	pointer-events: none;
 }
 
 // Semantic color loop
 $hub-dropdown-item-types: primary, secondary, success, danger, warning, info;
 
 @each $type in $hub-dropdown-item-types {
-	.hub-dropdown-item-#{$type} .hub-dropdown-item__inner {
-		color: var(--hub-sys-color-#{$type}-emphasis);
-
-		&:hover {
-			background: var(--hub-sys-color-#{$type}-subtle);
-		}
+	:host(.hub-dropdown-item-#{$type}) .hub-dropdown-item__inner {
+		@include hub-dropdown-item-color-rules($type);
 	}
 }

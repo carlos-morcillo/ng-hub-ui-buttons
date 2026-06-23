@@ -1,0 +1,29 @@
+// ── FAB color-generation mixin ────────────────────────────────────────────────
+//
+// HubFabComponent uses ViewEncapsulation.None, so color rules are global classes.
+// This mixin generates a complete .hub-fab-{type} rule that can be called directly
+// from any global stylesheet — no selector context needed.
+//
+// Token convention (same as the rest of the library):
+//   --hub-sys-color-{type}-default     FAB background color
+//   --hub-sys-color-{type}-on-default  FAB icon/text color
+//
+// Usage:
+//
+//   @use 'ng-hub-ui-buttons/styles' as hub;
+//
+//   :root {
+//     --hub-sys-color-brand-default:    #ff6b00;
+//     --hub-sys-color-brand-on-default: #fff;
+//   }
+//
+//   @include hub.hub-fab-color('brand');
+//   // Renders: <hub-fab color="brand"> or color="brand" on the FAB
+
+/// Generates the global .hub-fab-{$type} color rule.
+@mixin hub-fab-color($type) {
+	.hub-fab-#{$type} {
+		background: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+		color: var(--hub-sys-color-#{$type}-on-default, #fff);
+	}
+}

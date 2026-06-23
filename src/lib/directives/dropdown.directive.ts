@@ -89,6 +89,11 @@ export class HubDropdownDirective {
 		this.isOpen.set(true);
 		this.opened.emit();
 
+		// Close on scroll so the panel stays aligned with the trigger
+		fromEvent(document, 'scroll', { passive: true, capture: true })
+			.pipe(take(1), takeUntilDestroyed(this._destroyRef))
+			.subscribe(() => this.close());
+
 		// Click-outside detection (document-level)
 		fromEvent<MouseEvent>(document, 'click')
 			.pipe(

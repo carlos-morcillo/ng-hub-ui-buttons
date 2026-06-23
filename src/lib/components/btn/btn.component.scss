@@ -1,5 +1,7 @@
+@use '../../styles/btn-mixins' as *;
+
 // ── Token defaults (zero specificity — any consumer rule wins) ────────────
-:where(.hub-btn) {
+:where(:host) {
 	--hub-btn-padding-x: 0.875rem;
 	--hub-btn-padding-y: 0.4375rem;
 	--hub-btn-border-radius: var(--hub-sys-radius-md, 0.375rem);
@@ -13,7 +15,7 @@
 }
 
 // ── Base styles ───────────────────────────────────────────────────────────
-.hub-btn {
+:host {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -28,45 +30,45 @@
 	transition: var(--hub-btn-transition);
 	user-select: none;
 	white-space: nowrap;
+}
 
-	&.hub-btn-disabled,
-	&:disabled {
-		opacity: var(--hub-btn-disabled-opacity);
-		pointer-events: none;
-	}
+:host(.hub-btn-disabled),
+:host([disabled]) {
+	opacity: var(--hub-btn-disabled-opacity);
+	pointer-events: none;
+}
 
-	&.hub-btn-loading {
-		pointer-events: none;
-	}
+:host(.hub-btn-loading) {
+	pointer-events: none;
 }
 
 // ── Size modifiers ────────────────────────────────────────────────────────
-.hub-btn-sm {
+:host(.hub-btn-sm) {
 	--hub-btn-padding-x: 0.625rem;
 	--hub-btn-padding-y: 0.25rem;
 	--hub-btn-font-size: 0.8125rem;
 	--hub-btn-border-radius: var(--hub-sys-radius-sm, 0.25rem);
 }
 
-.hub-btn-lg {
+:host(.hub-btn-lg) {
 	--hub-btn-padding-x: 1.25rem;
 	--hub-btn-padding-y: 0.625rem;
 	--hub-btn-font-size: 1rem;
 }
 
-.hub-btn-xl {
+:host(.hub-btn-xl) {
 	--hub-btn-padding-x: 1.75rem;
 	--hub-btn-padding-y: 0.8125rem;
 	--hub-btn-font-size: 1.125rem;
 }
 
 // Icon-only: square aspect ratio
-.hub-btn-icon {
+:host(.hub-btn-icon) {
 	--hub-btn-padding-x: var(--hub-btn-padding-y);
 	aspect-ratio: 1;
 }
 
-// ── Spinner ───────────────────────────────────────────────────────────────
+// ── Spinner (child element — Angular scopes this correctly) ───────────────
 .hub-btn__spinner {
 	display: inline-block;
 	width: var(--hub-btn-spinner-size);
@@ -86,70 +88,44 @@
 // ── Semantic color loops ──────────────────────────────────────────────────
 $hub-btn-types: primary, secondary, success, danger, warning, info;
 
-// SOLID
 @each $type in $hub-btn-types {
-	.hub-btn-solid.hub-btn-#{$type} {
-		background: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
-		color: var(--hub-sys-color-#{$type}-on-default, #fff);
-		border-color: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
-
-		&:hover:not(:disabled):not(.hub-btn-disabled) {
-			background: var(--hub-sys-color-#{$type}-emphasis);
-			border-color: var(--hub-sys-color-#{$type}-emphasis);
-		}
+	:host(.hub-btn-solid.hub-btn-#{$type}) {
+		@include hub-btn-variant-rules(
+			$type,
+			$bg: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
+			$color: var(--hub-sys-color-#{$type}-on-default, #fff),
+			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
+			$hover-bg: var(--hub-sys-color-#{$type}-emphasis),
+			$hover-border: var(--hub-sys-color-#{$type}-emphasis)
+		);
 	}
-}
 
-// OUTLINE
-@each $type in $hub-btn-types {
-	.hub-btn-outline.hub-btn-#{$type} {
-		background: transparent;
-		color: var(--hub-sys-color-#{$type}-emphasis);
-		border-color: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
-
-		&:hover:not(:disabled):not(.hub-btn-disabled) {
-			background: var(--hub-sys-color-#{$type}-subtle);
-		}
+	:host(.hub-btn-outline.hub-btn-#{$type}) {
+		@include hub-btn-variant-rules(
+			$type,
+			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}))
+		);
 	}
-}
 
-// SOFT (tinted background, no border)
-@each $type in $hub-btn-types {
-	.hub-btn-soft.hub-btn-#{$type} {
-		background: var(--hub-sys-color-#{$type}-subtle);
-		color: var(--hub-sys-color-#{$type}-emphasis);
-		border-color: transparent;
-
-		&:hover:not(:disabled):not(.hub-btn-disabled) {
-			background: color-mix(in srgb, var(--hub-sys-color-#{$type}-subtle) 80%, var(--hub-sys-color-#{$type}-default));
-		}
+	:host(.hub-btn-soft.hub-btn-#{$type}) {
+		@include hub-btn-variant-rules(
+			$type,
+			$bg: var(--hub-sys-color-#{$type}-subtle),
+			$hover-bg: color-mix(in srgb, var(--hub-sys-color-#{$type}-subtle) 80%, var(--hub-sys-color-#{$type}-default))
+		);
 	}
-}
 
-// GHOST
-@each $type in $hub-btn-types {
-	.hub-btn-ghost.hub-btn-#{$type} {
-		background: transparent;
-		color: var(--hub-sys-color-#{$type}-emphasis);
-		border-color: transparent;
-
-		&:hover:not(:disabled):not(.hub-btn-disabled) {
-			background: var(--hub-sys-color-#{$type}-subtle);
-		}
+	:host(.hub-btn-ghost.hub-btn-#{$type}) {
+		@include hub-btn-variant-rules($type);
 	}
-}
 
-// LINK
-@each $type in $hub-btn-types {
-	.hub-btn-link.hub-btn-#{$type} {
-		background: transparent;
-		color: var(--hub-sys-color-#{$type}-emphasis);
-		border-color: transparent;
-		text-decoration: underline;
-		padding-inline: 0.125rem;
-
-		&:hover:not(:disabled):not(.hub-btn-disabled) {
-			color: var(--hub-sys-color-#{$type}-default);
-		}
+	:host(.hub-btn-link.hub-btn-#{$type}) {
+		@include hub-btn-variant-rules(
+			$type,
+			$hover-bg: null,
+			$hover-color: var(--hub-sys-color-#{$type}-default),
+			$text-decoration: underline,
+			$padding-inline: 0.125rem
+		);
 	}
 }

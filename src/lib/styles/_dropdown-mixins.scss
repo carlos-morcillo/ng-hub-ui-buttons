@@ -1,0 +1,58 @@
+// ── Dropdown color-generation mixins ─────────────────────────────────────────
+//
+// Exposes the color logic for HubDropdownPanelComponent and HubDropdownItemComponent
+// so third-party developers can register extra semantic colors.
+//
+// Token convention:
+//   --hub-sys-color-{type}-default    accent color (panel top border)
+//   --hub-sys-color-{type}-emphasis   text color for item labels
+//   --hub-sys-color-{type}-subtle     hover background for item rows
+//
+// Usage:
+//
+//   @use 'ng-hub-ui-buttons/styles' as hub;
+//
+//   :root {
+//     --hub-sys-color-brand-default:  #ff6b00;
+//     --hub-sys-color-brand-emphasis: #cc5500;
+//     --hub-sys-color-brand-subtle:   #fff0e6;
+//   }
+//
+//   // Panel with brand accent border:
+//   @include hub.hub-dropdown-panel-color('brand');
+//
+//   // Item with brand text + hover:
+//   @include hub.hub-dropdown-item-color('brand');
+
+// ── Rules-only mixins (no selector) ──────────────────────────────────────────
+
+/// CSS properties that apply the semantic accent border to a dropdown panel.
+@mixin hub-dropdown-panel-color-rules($type) {
+	border-top: 3px solid var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+}
+
+/// CSS properties that apply semantic text and hover colors to a dropdown item's inner button.
+@mixin hub-dropdown-item-color-rules($type) {
+	color: var(--hub-sys-color-#{$type}-emphasis);
+
+	&:hover {
+		background: var(--hub-sys-color-#{$type}-subtle);
+	}
+}
+
+// ── Full-selector convenience mixins ─────────────────────────────────────────
+
+/// Generates a complete rule for a colored dropdown panel (global stylesheet use).
+@mixin hub-dropdown-panel-color($type) {
+	hub-dropdown-panel.hub-dropdown-panel-#{$type} {
+		@include hub-dropdown-panel-color-rules($type);
+	}
+}
+
+/// Generates a complete rule for a colored dropdown item (global stylesheet use).
+/// Targets the inner button element, matching the component's internal structure.
+@mixin hub-dropdown-item-color($type) {
+	hub-dropdown-item.hub-dropdown-item-#{$type} .hub-dropdown-item__inner {
+		@include hub-dropdown-item-color-rules($type);
+	}
+}

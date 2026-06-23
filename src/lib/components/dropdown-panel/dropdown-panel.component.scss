@@ -1,5 +1,7 @@
+@use '../../styles/dropdown-mixins' as *;
+
 // ── Token defaults ────────────────────────────────────────────────────────
-:where(.hub-dropdown-panel) {
+:where(:host) {
 	--hub-dropdown-panel-min-width: 11.25rem;
 	--hub-dropdown-panel-max-height: 20rem;
 	--hub-dropdown-panel-padding-y: 0.25rem;
@@ -10,7 +12,8 @@
 	--hub-dropdown-panel-z-index: 1000;
 }
 
-.hub-dropdown-panel {
+:host {
+	display: block;
 	min-width: var(--hub-dropdown-panel-min-width);
 	max-height: var(--hub-dropdown-panel-max-height);
 	overflow-y: auto;
@@ -26,7 +29,7 @@
 $hub-dropdown-panel-types: primary, secondary, success, danger, warning, info;
 
 @each $type in $hub-dropdown-panel-types {
-	.hub-dropdown-panel-#{$type} {
-		border-top: 3px solid var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}));
+	:host(.hub-dropdown-panel-#{$type}) {
+		@include hub-dropdown-panel-color-rules($type);
 	}
 }

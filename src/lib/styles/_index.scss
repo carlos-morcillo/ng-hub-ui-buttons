@@ -1,0 +1,16 @@
+// ── ng-hub-ui-buttons public SCSS API ────────────────────────────────────────
+//
+// Import this file to access all variant-generation mixins:
+//
+//   @use 'ng-hub-ui-buttons/styles' as hub;
+//
+// Then call any mixin to register additional semantic colors:
+//
+//   hub-btn, [hubBtn] { @include hub.hub-btn-color-rules('brand'); }
+//   @include hub.hub-fab-color('brand');
+//   @include hub.hub-dropdown-panel-color('brand');
+//   @include hub.hub-dropdown-item-color('brand');
+
+@forward 'btn-mixins';
+@forward 'fab-mixins';
+@forward 'dropdown-mixins';

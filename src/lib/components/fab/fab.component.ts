@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, HostBinding, OnInit, inject, input, output, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, HostBinding, OnInit, ViewEncapsulation, inject, input, output, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
@@ -16,7 +16,8 @@ import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/butto
 	templateUrl: './fab.component.html',
 	styleUrl: './fab.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	host: { class: 'hub-fab' }
+	host: { class: 'hub-fab' },
+	encapsulation: ViewEncapsulation.None
 })
 export class HubFabComponent implements OnInit {
 	color = input<HubSemanticColor>('primary');

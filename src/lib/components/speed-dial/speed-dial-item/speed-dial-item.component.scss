@@ -1,41 +1,42 @@
-.hub-speed-dial-item {
+:host {
 	display: flex;
 	align-items: center;
 	gap: 0.625rem;
+}
 
-	&__label {
-		font-size: 0.8rem;
-		font-weight: 500;
-		background: var(--hub-sys-color-surface-default, #1e293b);
-		color: var(--hub-sys-text-primary, #fff);
-		padding: 0.1875rem 0.5rem;
-		border-radius: 0.3125rem;
-		white-space: nowrap;
-		box-shadow: var(--hub-sys-shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.12));
+// Child elements — Angular scopes these via _ngcontent automatically
+.hub-speed-dial-item__label {
+	font-size: 0.8rem;
+	font-weight: 500;
+	background: var(--hub-sys-color-surface-default, #1e293b);
+	color: var(--hub-sys-text-primary, #fff);
+	padding: 0.1875rem 0.5rem;
+	border-radius: 0.3125rem;
+	white-space: nowrap;
+	box-shadow: var(--hub-sys-shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.12));
+}
+
+.hub-speed-dial-item__btn {
+	width: 2.625rem;
+	height: 2.625rem;
+	border-radius: 50%;
+	border: none;
+	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.1rem;
+	background: var(--hub-sys-color-surface-default, #fff);
+	box-shadow: var(--hub-sys-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+	transition: transform 0.15s ease;
+
+	&:hover {
+		transform: scale(1.1);
 	}
 
-	&__btn {
-		width: 2.625rem;
-		height: 2.625rem;
-		border-radius: 50%;
-		border: none;
-		cursor: pointer;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		font-size: 1.1rem;
-		background: var(--hub-sys-color-surface-default, #fff);
-		box-shadow: var(--hub-sys-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
-		transition: transform 0.15s ease;
-
-		&:hover {
-			transform: scale(1.1);
-		}
-
-		&:disabled {
-			opacity: 0.45;
-			pointer-events: none;
-		}
+	&:disabled {
+		opacity: 0.45;
+		pointer-events: none;
 	}
 }
 

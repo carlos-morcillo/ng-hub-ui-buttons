@@ -1,0 +1,140 @@
+// ── Button variant-generation mixins ─────────────────────────────────────────
+//
+// Public API: two mixins.
+//
+//   hub-btn-variant-rules($type, ...)  ← generic primitive: full control
+//   hub-btn-color-rules($type)         ← convenience: all five built-in variants at once
+//
+// Token convention (required for each custom color):
+//   --hub-sys-color-{type}-default     main fill / border value
+//   --hub-sys-color-{type}-emphasis    darker accent for hover / active
+//   --hub-sys-color-{type}-subtle      tinted surface for soft fills / hover backgrounds
+//   --hub-sys-color-{type}-on-default  text color placed on top of -default
+//
+// Usage — add "brand" color to all five built-in variants:
+//
+//   @use 'ng-hub-ui-buttons/styles' as hub;
+//
+//   :root {
+//     --hub-sys-color-brand-default:    #ff6b00;
+//     --hub-sys-color-brand-emphasis:   #cc5500;
+//     --hub-sys-color-brand-subtle:     #fff0e6;
+//     --hub-sys-color-brand-on-default: #fff;
+//   }
+//
+//   hub-btn, [hubBtn] {
+//     @include hub.hub-btn-color-rules('brand');
+//   }
+//
+// Usage — create a fully custom "inverted" variant:
+//
+//   hub-btn, [hubBtn] {
+//     &.hub-btn-inverted.hub-btn-brand {
+//       @include hub.hub-btn-variant-rules('brand',
+//         $bg:          var(--hub-sys-color-brand-on-default),
+//         $color:       var(--hub-sys-color-brand-default),
+//         $border:      var(--hub-sys-color-brand-default),
+//         $hover-bg:    var(--hub-sys-color-brand-default),
+//         $hover-color: var(--hub-sys-color-brand-on-default)
+//       );
+//     }
+//   }
+
+/// Outputs button variant CSS rules for a given semantic color.
+/// Parameter defaults match the ghost variant — override only the values that differ.
+///
+/// @param {string} $type            - Color name; maps to --hub-sys-color-{type}-* tokens.
+/// @param {value}  $bg              - `background` in resting state.
+/// @param {value}  $color           - `color` in resting state.
+/// @param {value}  $border          - `border-color` in resting state.
+/// @param {value}  $hover-bg        - `background` on hover (null = skip).
+/// @param {value}  $hover-border    - `border-color` on hover (null = skip).
+/// @param {value}  $hover-color     - `color` on hover (null = skip).
+/// @param {value}  $text-decoration - Extra text-decoration (null = skip).
+/// @param {value}  $padding-inline  - Extra padding-inline override (null = skip).
+@mixin hub-btn-variant-rules(
+	$type,
+	$bg: transparent,
+	$color: var(--hub-sys-color-#{$type}-emphasis),
+	$border: transparent,
+	$hover-bg: var(--hub-sys-color-#{$type}-subtle),
+	$hover-border: null,
+	$hover-color: null,
+	$text-decoration: null,
+	$padding-inline: null
+) {
+	background: $bg;
+	color: $color;
+	border-color: $border;
+
+	@if $text-decoration {
+		text-decoration: $text-decoration;
+	}
+
+	@if $padding-inline {
+		padding-inline: $padding-inline;
+	}
+
+	&:hover:not([disabled]):not(.hub-btn-disabled) {
+		@if $hover-bg {
+			background: $hover-bg;
+		}
+
+		@if $hover-border {
+			border-color: $hover-border;
+		}
+
+		@if $hover-color {
+			color: $hover-color;
+		}
+	}
+}
+
+/// Generates class-based selectors for all five built-in button variants of a custom color.
+/// Must be called inside a selector block that targets hub-btn or [hubBtn]:
+///
+///   hub-btn, [hubBtn] {
+///     @include hub-btn-color-rules('brand');
+///   }
+///
+@mixin hub-btn-color-rules($type) {
+	&.hub-btn-solid.hub-btn-#{$type} {
+		@include hub-btn-variant-rules(
+			$type,
+			$bg: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
+			$color: var(--hub-sys-color-#{$type}-on-default, #fff),
+			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
+			$hover-bg: var(--hub-sys-color-#{$type}-emphasis),
+			$hover-border: var(--hub-sys-color-#{$type}-emphasis)
+		);
+	}
+
+	&.hub-btn-outline.hub-btn-#{$type} {
+		@include hub-btn-variant-rules(
+			$type,
+			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}))
+		);
+	}
+
+	&.hub-btn-soft.hub-btn-#{$type} {
+		@include hub-btn-variant-rules(
+			$type,
+			$bg: var(--hub-sys-color-#{$type}-subtle),
+			$hover-bg: color-mix(in srgb, var(--hub-sys-color-#{$type}-subtle) 80%, var(--hub-sys-color-#{$type}-default))
+		);
+	}
+
+	&.hub-btn-ghost.hub-btn-#{$type} {
+		@include hub-btn-variant-rules($type);
+	}
+
+	&.hub-btn-link.hub-btn-#{$type} {
+		@include hub-btn-variant-rules(
+			$type,
+			$hover-bg: null,
+			$hover-color: var(--hub-sys-color-#{$type}-default),
+			$text-decoration: underline,
+			$padding-inline: 0.125rem
+		);
+	}
+}
