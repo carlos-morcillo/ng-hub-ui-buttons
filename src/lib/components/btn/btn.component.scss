@@ -2,16 +2,16 @@
 
 // ── Token defaults (zero specificity — any consumer rule wins) ────────────
 :where(:host) {
-	--hub-btn-padding-x: 0.875rem;
-	--hub-btn-padding-y: 0.4375rem;
-	--hub-btn-border-radius: var(--hub-sys-radius-md, 0.375rem);
-	--hub-btn-border-width: 1.5px;
-	--hub-btn-font-size: var(--hub-ref-font-size-base, 1rem);
-	--hub-btn-font-weight: 500;
-	--hub-btn-gap: 0.375rem;
-	--hub-btn-transition: all 0.15s ease;
-	--hub-btn-spinner-size: 0.875em;
-	--hub-btn-disabled-opacity: 0.55;
+	--hub-button-padding-x: 0.875rem;
+	--hub-button-padding-y: 0.4375rem;
+	--hub-button-border-radius: var(--hub-sys-radius-md, 0.375rem);
+	--hub-button-border-width: 1.5px;
+	--hub-button-font-size: var(--hub-ref-font-size-base, 1rem);
+	--hub-button-font-weight: 500;
+	--hub-button-gap: 0.375rem;
+	--hub-button-transition: all 0.15s ease;
+	--hub-button-spinner-size: 0.875em;
+	--hub-button-disabled-opacity: 0.55;
 }
 
 // ── Base styles ───────────────────────────────────────────────────────────
@@ -19,22 +19,22 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	gap: var(--hub-btn-gap);
-	padding: var(--hub-btn-padding-y) var(--hub-btn-padding-x);
-	border-radius: var(--hub-btn-border-radius);
-	border: var(--hub-btn-border-width) solid transparent;
-	font-size: var(--hub-btn-font-size);
-	font-weight: var(--hub-btn-font-weight);
+	gap: var(--hub-button-gap);
+	padding: var(--hub-button-padding-y) var(--hub-button-padding-x);
+	border-radius: var(--hub-button-border-radius);
+	border: var(--hub-button-border-width) solid transparent;
+	font-size: var(--hub-button-font-size);
+	font-weight: var(--hub-button-font-weight);
 	cursor: pointer;
 	text-decoration: none;
-	transition: var(--hub-btn-transition);
+	transition: var(--hub-button-transition);
 	user-select: none;
 	white-space: nowrap;
 }
 
 :host(.hub-btn-disabled),
 :host([disabled]) {
-	opacity: var(--hub-btn-disabled-opacity);
+	opacity: var(--hub-button-disabled-opacity);
 	pointer-events: none;
 }
 
@@ -44,35 +44,35 @@
 
 // ── Size modifiers ────────────────────────────────────────────────────────
 :host(.hub-btn-sm) {
-	--hub-btn-padding-x: 0.625rem;
-	--hub-btn-padding-y: 0.25rem;
-	--hub-btn-font-size: 0.8125rem;
-	--hub-btn-border-radius: var(--hub-sys-radius-sm, 0.25rem);
+	--hub-button-padding-x: 0.625rem;
+	--hub-button-padding-y: 0.25rem;
+	--hub-button-font-size: 0.8125rem;
+	--hub-button-border-radius: var(--hub-sys-radius-sm, 0.25rem);
 }
 
 :host(.hub-btn-lg) {
-	--hub-btn-padding-x: 1.25rem;
-	--hub-btn-padding-y: 0.625rem;
-	--hub-btn-font-size: 1rem;
+	--hub-button-padding-x: 1.25rem;
+	--hub-button-padding-y: 0.625rem;
+	--hub-button-font-size: 1rem;
 }
 
 :host(.hub-btn-xl) {
-	--hub-btn-padding-x: 1.75rem;
-	--hub-btn-padding-y: 0.8125rem;
-	--hub-btn-font-size: 1.125rem;
+	--hub-button-padding-x: 1.75rem;
+	--hub-button-padding-y: 0.8125rem;
+	--hub-button-font-size: 1.125rem;
 }
 
 // Icon-only: square aspect ratio
 :host(.hub-btn-icon) {
-	--hub-btn-padding-x: var(--hub-btn-padding-y);
+	--hub-button-padding-x: var(--hub-button-padding-y);
 	aspect-ratio: 1;
 }
 
 // ── Spinner (child element — Angular scopes this correctly) ───────────────
 .hub-btn__spinner {
 	display: inline-block;
-	width: var(--hub-btn-spinner-size);
-	height: var(--hub-btn-spinner-size);
+	width: var(--hub-button-spinner-size);
+	height: var(--hub-button-spinner-size);
 	border: 2px solid #{'color-mix(in srgb, currentColor 30%, transparent)'};
 	border-top-color: currentColor;
 	border-radius: 50%;

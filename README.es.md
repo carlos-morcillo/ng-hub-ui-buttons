@@ -126,8 +126,8 @@ export class MyComponent { }
 Mismos inputs que `HubBtnComponent`. Aplícalo sobre un `<button>` o `<a>` nativo.
 
 ```html
-<button hubBtn variant="outline" color="success">Confirmar</button>
-<a hubBtn variant="link" color="primary" href="/docs">Leer más</a>
+<button hubButton variant="outline" color="success">Confirmar</button>
+<a hubButton variant="link" color="primary" href="/docs">Leer más</a>
 ```
 
 ### `HubFabComponent` — `<hub-fab>`
@@ -220,16 +220,16 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 
 ```css
 /* Botón */
---hub-btn-padding-x:         0.875rem;
---hub-btn-padding-y:         0.4375rem;
---hub-btn-border-radius:     var(--hub-sys-radius-md, 0.375rem);
---hub-btn-border-width:      1.5px;
---hub-btn-font-size:         1rem;
---hub-btn-font-weight:       500;
---hub-btn-gap:               0.375rem;
---hub-btn-transition:        all 0.15s ease;
---hub-btn-spinner-size:      0.875em;
---hub-btn-disabled-opacity:  0.55;
+--hub-button-padding-x:         0.875rem;
+--hub-button-padding-y:         0.4375rem;
+--hub-button-border-radius:     var(--hub-sys-radius-md, 0.375rem);
+--hub-button-border-width:      1.5px;
+--hub-button-font-size:         1rem;
+--hub-button-font-weight:       500;
+--hub-button-gap:               0.375rem;
+--hub-button-transition:        all 0.15s ease;
+--hub-button-spinner-size:      0.875em;
+--hub-button-disabled-opacity:  0.55;
 
 /* FAB */
 --hub-fab-size-mini:          2.5rem;

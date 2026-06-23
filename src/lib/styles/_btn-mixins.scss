@@ -22,13 +22,13 @@
 //     --hub-sys-color-brand-on-default: #fff;
 //   }
 //
-//   hub-btn, [hubBtn] {
+//   hub-button, [hubButton] {
 //     @include hub.hub-btn-color-rules('brand');
 //   }
 //
 // Usage — create a fully custom "inverted" variant:
 //
-//   hub-btn, [hubBtn] {
+//   hub-button, [hubButton] {
 //     &.hub-btn-inverted.hub-btn-brand {
 //       @include hub.hub-btn-variant-rules('brand',
 //         $bg:          var(--hub-sys-color-brand-on-default),
@@ -91,9 +91,9 @@
 }
 
 /// Generates class-based selectors for all five built-in button variants of a custom color.
-/// Must be called inside a selector block that targets hub-btn or [hubBtn]:
+/// Must be called inside a selector block that targets hub-button or [hubButton]:
 ///
-///   hub-btn, [hubBtn] {
+///   hub-button, [hubButton] {
 ///     @include hub-btn-color-rules('brand');
 ///   }
 ///

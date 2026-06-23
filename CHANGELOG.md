@@ -6,6 +6,7 @@
 
 - `HubBtnComponent` selector renamed from `hub-btn` to `hub-button`.
 - `HubBtnDirective` selector renamed from `[hubBtn]` to `[hubButton]`.
+- CSS custom properties renamed from `--hub-btn-*` to `--hub-button-*` for naming consistency with the element selector.
 - `peerDependencies`: `ng-hub-ui-utils` corrected to `>=1.0.0` (published package follows a different versioning scheme, not aligned with Angular major).
 
 ## [22.1.0] - 2026-06-23
