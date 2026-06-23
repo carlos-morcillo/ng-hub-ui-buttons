@@ -1,5 +1,13 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.2.0] - 2026-06-23
+
+### Changed
+
+- `HubBtnComponent` selector renamed from `hub-btn` to `hub-button`.
+- `HubBtnDirective` selector renamed from `[hubBtn]` to `[hubButton]`.
+- `peerDependencies`: `ng-hub-ui-utils` corrected to `>=1.0.0` (published package follows a different versioning scheme, not aligned with Angular major).
+
 ## [22.1.0] - 2026-06-23
 
 ### Added

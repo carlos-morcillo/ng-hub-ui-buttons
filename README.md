@@ -93,7 +93,7 @@ import {
     standalone: true,
     imports: [HubBtnComponent, HubDropdownDirective, HubDropdownPanelComponent, HubDropdownItemComponent],
     template: `
-        <hub-btn [hubDropdown]="menu" placement="bottom-start">Actions</hub-btn>
+        <hub-button [hubDropdown]="menu" placement="bottom-start">Actions</hub-button>
 
         <ng-template #menu>
             <hub-dropdown-panel>
@@ -110,7 +110,7 @@ export class MyComponent { }
 
 ## Components and Directives
 
-### `HubBtnComponent` — `<hub-btn>`
+### `HubBtnComponent` — `<hub-button>`
 
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -121,7 +121,7 @@ export class MyComponent { }
 | `loading` | `boolean` | `false` | Shows spinner and blocks interaction |
 | `disabled` | `boolean` | `false` | Disables the button and sets the `disabled` attribute |
 
-### `HubBtnDirective` — `[hubBtn]`
+### `HubBtnDirective` — `[hubButton]`
 
 Same inputs as `HubBtnComponent`. Apply to a native `<button>` or `<a>` element.
 
@@ -157,7 +157,7 @@ Use `hubTrigger` on the element projected as the trigger button:
 
 ```html
 <hub-speed-dial>
-    <hub-btn hubTrigger color="primary"><i class="fa-solid fa-plus"></i></hub-btn>
+    <hub-button hubTrigger color="primary"><i class="fa-solid fa-plus"></i></hub-button>
     <hub-speed-dial-item icon="fa-solid fa-pen" label="Edit" (itemClick)="edit()" />
     <hub-speed-dial-item icon="fa-solid fa-trash" label="Delete" color="danger" (itemClick)="delete()" />
 </hub-speed-dial>
@@ -287,14 +287,14 @@ Register custom semantic colors without modifying the library. Import the mixin 
     --hub-sys-color-brand-on-default: #fff;
 }
 
-hub-btn, [hubBtn] {
+hub-button, [hubButton] {
     @include hub.hub-btn-color-rules('brand');
 }
 ```
 
 ```html
-<hub-btn variant="solid" color="brand">Brand</hub-btn>
-<hub-btn variant="outline" color="brand">Brand</hub-btn>
+<hub-button variant="solid" color="brand">Brand</hub-button>
+<hub-button variant="outline" color="brand">Brand</hub-button>
 ```
 
 ### Create a fully custom variant
@@ -302,7 +302,7 @@ hub-btn, [hubBtn] {
 `hub-btn-variant-rules` is the generic primitive. Its defaults match the `ghost` variant — override only the values that differ:
 
 ```scss
-hub-btn, [hubBtn] {
+hub-button, [hubButton] {
     &.hub-btn-inverted.hub-btn-brand {
         @include hub.hub-btn-variant-rules('brand',
             $bg:          var(--hub-sys-color-brand-on-default),
@@ -335,8 +335,8 @@ hub-btn, [hubBtn] {
 
 | Mixin | Context | Description |
 |---|---|---|
-| `hub-btn-variant-rules($type, ...)` | global `hub-btn, [hubBtn]` block | Generic primitive — all variant properties as named params |
-| `hub-btn-color-rules($type)` | global `hub-btn, [hubBtn]` block | All five built-in variants for one custom color |
+| `hub-btn-variant-rules($type, ...)` | global `hub-button, [hubButton]` block | Generic primitive — all variant properties as named params |
+| `hub-btn-color-rules($type)` | global `hub-button, [hubButton]` block | All five built-in variants for one custom color |
 | `hub-fab-color($type)` | root | Global `.hub-fab-{type}` color rule |
 | `hub-dropdown-panel-color($type)` | root | Global color rule for `hub-dropdown-panel` |
 | `hub-dropdown-panel-color-rules($type)` | inside `hub-dropdown-panel` selector | CSS properties only — bring your own selector |

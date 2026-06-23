@@ -3,11 +3,11 @@ import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../models/button.ty
 
 /**
  * Applies hub-btn styles to any host element (button, a, div, etc.).
- * Use this when the element type must stay native and cannot be replaced by <hub-btn>.
+ * Use this when the element type must stay native and cannot be replaced by <hub-button>.
  * Exposes the same inputs as HubBtnComponent.
  */
 @Directive({
-	selector: '[hubBtn]',
+	selector: '[hubButton]',
 	standalone: true,
 	host: { class: 'hub-btn' }
 })

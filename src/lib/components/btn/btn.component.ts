@@ -3,11 +3,11 @@ import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button
 
 /**
  * Styled button component. Applies hub-btn CSS classes computed from signal inputs.
- * Use <hub-btn> when the element type can be this component, or [hubBtn] directive
+ * Use <hub-button> when the element type can be this component, or [hubButton] directive
  * when a native element (button, a, etc.) must keep its tag.
  */
 @Component({
-	selector: 'hub-btn',
+	selector: 'hub-button',
 	standalone: true,
 	templateUrl: './btn.component.html',
 	styleUrl: './btn.component.scss',

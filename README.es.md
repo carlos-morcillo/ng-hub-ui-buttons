@@ -93,7 +93,7 @@ import {
     standalone: true,
     imports: [HubBtnComponent, HubDropdownDirective, HubDropdownPanelComponent, HubDropdownItemComponent],
     template: `
-        <hub-btn [hubDropdown]="menu" placement="bottom-start">Acciones</hub-btn>
+        <hub-button [hubDropdown]="menu" placement="bottom-start">Acciones</hub-button>
 
         <ng-template #menu>
             <hub-dropdown-panel>
@@ -110,7 +110,7 @@ export class MyComponent { }
 
 ## Componentes y directivas
 
-### `HubBtnComponent` — `<hub-btn>`
+### `HubBtnComponent` — `<hub-button>`
 
 | Input | Tipo | Por defecto | Descripción |
 |-------|------|-------------|-------------|
@@ -121,7 +121,7 @@ export class MyComponent { }
 | `loading` | `boolean` | `false` | Muestra spinner y bloquea la interacción |
 | `disabled` | `boolean` | `false` | Desactiva el botón y añade el atributo `disabled` |
 
-### `HubBtnDirective` — `[hubBtn]`
+### `HubBtnDirective` — `[hubButton]`
 
 Mismos inputs que `HubBtnComponent`. Aplícalo sobre un `<button>` o `<a>` nativo.
 
@@ -157,7 +157,7 @@ Usa `hubTrigger` en el elemento proyectado como botón trigger:
 
 ```html
 <hub-speed-dial>
-    <hub-btn hubTrigger color="primary"><i class="fa-solid fa-plus"></i></hub-btn>
+    <hub-button hubTrigger color="primary"><i class="fa-solid fa-plus"></i></hub-button>
     <hub-speed-dial-item icon="fa-solid fa-pen" label="Editar" (itemClick)="edit()" />
     <hub-speed-dial-item icon="fa-solid fa-trash" label="Eliminar" color="danger" (itemClick)="delete()" />
 </hub-speed-dial>
@@ -287,7 +287,7 @@ Registra colores semánticos personalizados sin modificar la librería. Importa 
     --hub-sys-color-brand-on-default: #fff;
 }
 
-hub-btn, [hubBtn] {
+hub-button, [hubButton] {
     @include hub.hub-btn-color-rules('brand');
 }
 ```
@@ -297,7 +297,7 @@ hub-btn, [hubBtn] {
 `hub-btn-variant-rules` es el primitivo genérico. Sus defaults coinciden con la variante `ghost` — solo sobreescribe lo que difiera:
 
 ```scss
-hub-btn, [hubBtn] {
+hub-button, [hubButton] {
     &.hub-btn-inverted.hub-btn-brand {
         @include hub.hub-btn-variant-rules('brand',
             $bg:          var(--hub-sys-color-brand-on-default),
@@ -314,8 +314,8 @@ hub-btn, [hubBtn] {
 
 | Mixin | Contexto | Descripción |
 |---|---|---|
-| `hub-btn-variant-rules($type, ...)` | bloque `hub-btn, [hubBtn]` | Primitivo genérico — todas las propiedades de variante como parámetros con nombre |
-| `hub-btn-color-rules($type)` | bloque `hub-btn, [hubBtn]` | Genera las cinco variantes built-in para un color personalizado |
+| `hub-btn-variant-rules($type, ...)` | bloque `hub-button, [hubButton]` | Primitivo genérico — todas las propiedades de variante como parámetros con nombre |
+| `hub-btn-color-rules($type)` | bloque `hub-button, [hubButton]` | Genera las cinco variantes built-in para un color personalizado |
 | `hub-fab-color($type)` | raíz | Regla global `.hub-fab-{type}` |
 | `hub-dropdown-panel-color($type)` | raíz | Regla global de color para `hub-dropdown-panel` |
 | `hub-dropdown-panel-color-rules($type)` | dentro de selector `hub-dropdown-panel` | Solo propiedades CSS — tú eliges el selector |

@@ -6,7 +6,7 @@ import { HubBtnDirective } from './btn.directive';
 @Component({
 	standalone: true,
 	imports: [HubBtnDirective],
-	template: `<button hubBtn color="success" variant="outline" size="lg">Click</button>`
+	template: `<button hubButton color="success" variant="outline" size="lg">Click</button>`
 })
 class TestHostComponent {}
 
