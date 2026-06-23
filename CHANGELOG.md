@@ -1,5 +1,11 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.2.1] - 2026-06-23
+
+### Changed
+
+- `btn.component.ts` renamed to `button.component.ts` for naming consistency with the element selector.
+
 ## [22.2.0] - 2026-06-23
 
 ### Changed
