@@ -9,7 +9,7 @@ export * from './lib/models/button.types';
 export * from './lib/tokens/dropdown.token';
 
 // Components
-export * from './lib/components/btn/btn.component';
+export * from './lib/components/btn/button.component';
 export * from './lib/components/fab/fab.component';
 export * from './lib/components/speed-dial/speed-dial.component';
 export * from './lib/components/speed-dial/speed-dial-item/speed-dial-item.component';

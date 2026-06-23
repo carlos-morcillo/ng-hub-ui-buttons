@@ -9,8 +9,8 @@ import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button
 @Component({
 	selector: 'hub-button',
 	standalone: true,
-	templateUrl: './btn.component.html',
-	styleUrl: './btn.component.scss',
+	templateUrl: './button.component.html',
+	styleUrl: './button.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { class: 'hub-btn' }
 })

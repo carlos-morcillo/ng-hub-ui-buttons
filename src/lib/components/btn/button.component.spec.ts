@@ -1,6 +1,6 @@
 import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HubBtnComponent } from './btn.component';
+import { HubBtnComponent } from './button.component';
 
 describe('HubBtnComponent', () => {
 	let fixture: ComponentFixture<HubBtnComponent>;
