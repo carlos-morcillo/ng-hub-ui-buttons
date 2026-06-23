@@ -336,6 +336,48 @@ hub-btn, [hubBtn] {
 
 ---
 
+## Contribuir
+
+¡Las contribuciones son bienvenidas! Abre una issue o envía un pull request en [GitHub](https://github.com/carlos-morcillo/ng-hub-ui-buttons).
+
+### Proceso de Pull Request
+
+1. Haz un fork del repositorio
+2. Crea una nueva rama: `git checkout -b feat/mi-nueva-feature`
+3. Realiza tus cambios
+4. Añade pruebas para cualquier funcionalidad nueva
+5. Actualiza la documentación si es necesario
+6. Envía un Pull Request
+
+### Directrices de desarrollo
+
+- Escribe pruebas unitarias para las nuevas funcionalidades
+- Sigue la guía de estilo de Angular
+- Actualiza la documentación ante cambios en la API
+- Mantén la compatibilidad hacia atrás
+- Añade comentarios JSDoc para la lógica compleja
+
+### Convención de commits
+
+Seguimos [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` Nuevas funcionalidades
+- `fix:` Corrección de errores
+- `docs:` Cambios en documentación
+- `refactor:` Refactorizaciones
+- `test:` Añadir o actualizar tests
+- `chore:` Tareas de mantenimiento
+
+### Reportar incidencias
+
+Antes de crear una incidencia, por favor:
+
+- Revisa las incidencias existentes
+- Incluye los pasos para reproducir el problema
+- Especifica tu entorno (versión de Angular, navegador)
+
+---
+
 ## Breaking changes
 
 Ver [BREAKING_CHANGES.md](./BREAKING_CHANGES.md).
@@ -344,6 +386,20 @@ Ver [BREAKING_CHANGES.md](./BREAKING_CHANGES.md).
 
 Ver [CHANGELOG.md](./CHANGELOG.md).
 
-## Licencia
+---
 
-MIT
+## ☕ Apoyar el proyecto
+
+Si este proyecto te resulta útil y quieres apoyar su desarrollo, puedes invitarme a un café:
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/carlosmorcillo)
+
+¡Tu apoyo es muy apreciado y ayuda a mantener y mejorar este proyecto!
+
+## 📄 Licencia
+
+Este proyecto está licenciado bajo la Licencia MIT — consulta el archivo [LICENSE](LICENSE) para más detalles.
+
+---
+
+Hecho con ❤️ por [Carlos Morcillo Fernández](https://www.carlosmorcillo.com)

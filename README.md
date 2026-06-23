@@ -357,6 +357,48 @@ hub-btn, [hubBtn] {
 
 ---
 
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request on [GitHub](https://github.com/carlos-morcillo/ng-hub-ui-buttons).
+
+### Pull Request Process
+
+1. Fork the repository
+2. Create a new branch: `git checkout -b feat/my-new-feature`
+3. Make your changes
+4. Add tests for any new functionality
+5. Update documentation if needed
+6. Submit a pull request
+
+### Development Guidelines
+
+- Write unit tests for new features
+- Follow the Angular style guide
+- Update documentation for API changes
+- Maintain backward compatibility
+- Add JSDoc comments for complex logic
+
+### Commit Guidelines
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+- `feat:` New features
+- `fix:` Bug fixes
+- `docs:` Documentation changes
+- `refactor:` Code refactors
+- `test:` Adding or updating tests
+- `chore:` Maintenance tasks
+
+### Reporting Issues
+
+Before creating an issue, please:
+
+- Check existing issues
+- Include reproduction steps
+- Specify your environment (Angular version, browser)
+
+---
+
 ## Breaking Changes
 
 See [BREAKING_CHANGES.md](./BREAKING_CHANGES.md).
@@ -365,6 +407,20 @@ See [BREAKING_CHANGES.md](./BREAKING_CHANGES.md).
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-## License
+---
 
-MIT
+## ☕ Support the Project
+
+If you find this project helpful and would like to support its development, you can buy me a coffee:
+
+[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/carlosmorcillo)
+
+Your support is greatly appreciated and helps maintain and improve this project!
+
+## 📄 License
+
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+
+---
+
+Made with ❤️ by [Carlos Morcillo Fernández](https://www.carlosmorcillo.com)
