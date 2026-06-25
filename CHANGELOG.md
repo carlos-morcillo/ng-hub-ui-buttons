@@ -1,5 +1,22 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.3.1] - 2026-06-25
+
+### Fixed
+
+- Design-token consistency pass: aligned inline fallback defaults with the canonical `ng-hub-ui-ds` values and routed hardcoded literals (z-index, font-weight, line-height, radii and theme-aware colours) through their `--hub-sys-*` / `--hub-ref-*` tokens, so they follow the active theme. No visual change when the ds tokens are loaded.
+
+## [22.3.0] - 2026-06-25
+
+### Changed
+
+- Consolidated every dimension token onto the shared `--hub-ref-*` reference scale, so button / FAB / dropdown sizing resolves through the design-system tokens instead of hand-tuned rem literals (matches the Figma `ff/button`, `ff/dropdown` and `ff/fab` variable layer):
+    - Button base: `--hub-button-padding-x` `0.875rem` → `var(--hub-ref-space-3)`, `--hub-button-padding-y` `0.4375rem` → `var(--hub-ref-space-2)`, `--hub-button-gap` `0.375rem` → `var(--hub-ref-space-2)`, `--hub-button-disabled-opacity` `0.55` → `var(--hub-sys-opacity-disabled)`.
+    - Button size ramp `sm` / `lg` / `xl` now references `--hub-ref-space-*` and `--hub-ref-font-size-*`.
+    - Dropdown: `--hub-dropdown-item-padding-x/y`, the item inner `gap`, `--hub-dropdown-panel-padding-y` and the `dropdown-header` padding/font fall back to `--hub-ref-*`.
+    - FAB: `--hub-fab-offset` → `var(--hub-ref-space-3)`, extended-FAB `gap` → `var(--hub-ref-space-2)`.
+- Visual note: a few defaults shift to land on the reference scale (button `md` padding 14→16px / 7→8px, gap 6→8px; dropdown item padding 14→16px; disabled opacity 0.55→0.65). Behaviour is unchanged.
+
 ## [22.2.1] - 2026-06-23
 
 ### Changed

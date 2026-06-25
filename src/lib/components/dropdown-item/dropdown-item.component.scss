@@ -2,8 +2,8 @@
 
 // ── Token defaults ────────────────────────────────────────────────────────
 :where(:host) {
-	--hub-dropdown-item-padding-y: 0.4375rem;
-	--hub-dropdown-item-padding-x: 0.875rem;
+	--hub-dropdown-item-padding-y: var(--hub-ref-space-2, 0.5rem);
+	--hub-dropdown-item-padding-x: var(--hub-ref-space-3, 1rem);
 	--hub-dropdown-item-hover-bg: var(--hub-sys-color-surface-subtle, #f8fafc);
 	--hub-dropdown-item-border-radius: var(--hub-sys-radius-sm, 0.25rem);
 	--hub-dropdown-item-disabled-opacity: 0.45;
@@ -17,12 +17,12 @@
 .hub-dropdown-item__inner {
 	display: flex;
 	align-items: center;
-	gap: 0.5rem;
+	gap: var(--hub-ref-space-2, 0.5rem);
 	width: 100%;
 	padding: var(--hub-dropdown-item-padding-y) var(--hub-dropdown-item-padding-x);
 	border: none;
 	background: transparent;
-	font-size: 0.875rem;
+	font-size: var(--hub-ref-font-size-sm, 0.875rem);
 	color: inherit;
 	cursor: pointer;
 	text-align: start;

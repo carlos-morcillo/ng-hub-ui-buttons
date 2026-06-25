@@ -7,7 +7,7 @@
 // Child elements — Angular scopes these via _ngcontent automatically
 .hub-speed-dial-item__label {
 	font-size: 0.8rem;
-	font-weight: 500;
+	font-weight: var(--hub-ref-font-weight-medium, 500);
 	background: var(--hub-sys-color-surface-default, #1e293b);
 	color: var(--hub-sys-text-primary, #fff);
 	padding: 0.1875rem 0.5rem;

@@ -8,12 +8,12 @@
 	--hub-fab-border-radius: 50%;
 	--hub-fab-shadow: var(--hub-sys-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
 	--hub-fab-shadow-hover: var(--hub-sys-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.18));
-	--hub-fab-offset: 1rem;
+	--hub-fab-offset: var(--hub-ref-space-3, 1rem);
 	--hub-fab-extended-height: 3.5rem;
 	--hub-fab-extended-radius: 1.75rem;
 	--hub-fab-extended-padding-x: 1.25rem;
 	--hub-fab-transition: box-shadow 0.2s ease, transform 0.15s ease;
-	--hub-fab-z-index: 1030;
+	--hub-fab-z-index: var(--hub-sys-zindex-fixed, 1030);
 }
 
 // ── Base (hub-fab is on both the component host and the speed-dial inner button) ──
@@ -30,7 +30,7 @@
 	box-shadow: var(--hub-fab-shadow);
 	z-index: var(--hub-fab-z-index);
 	transition: var(--hub-fab-transition);
-	color: #fff;
+	color: var(--hub-ref-color-white, #fff);
 	font-size: 1.4rem;
 
 	&:hover {
@@ -49,9 +49,9 @@
 		height: var(--hub-fab-extended-height);
 		border-radius: var(--hub-fab-extended-radius);
 		padding-inline: var(--hub-fab-extended-padding-x);
-		gap: 0.5rem;
+		gap: var(--hub-ref-space-2, 0.5rem);
 		font-size: 0.95rem;
-		font-weight: 600;
+		font-weight: var(--hub-ref-font-weight-semibold, 600);
 	}
 }
 
@@ -59,7 +59,7 @@
 .hub-fab-mini {
 	width: var(--hub-fab-size-mini);
 	height: var(--hub-fab-size-mini);
-	font-size: 1rem;
+	font-size: var(--hub-ref-font-size-base, 1rem);
 }
 
 .hub-fab-large {
