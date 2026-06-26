@@ -1,5 +1,29 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.4.0] - 2026-06-26
+
+### Added
+
+- Local accent slot `--hub-btn-accent` (default `var(--hub-sys-color-primary, #0d6efd)`): the single per-component colour input from which the whole role family is derived.
+- Runtime-derived role family from the slot, recomputed live with `color-mix()` / relative colour — no recompilation:
+    - `--hub-btn-accent-emphasis` = `color-mix(in oklch, accent 80%, var(--hub-sys-color-ink))` (hover / active).
+    - `--hub-btn-accent-subtle` = `color-mix(in oklch, accent 12%, var(--hub-sys-surface-page))` (soft fills).
+    - `--hub-btn-accent-on` = grayscale contrast flip of the accent (`oklch(from … clamp(0, (0.62 - l) * 1000, 1) 0 h)`) — the new on-accent contrast pair, replacing the old `--hub-sys-color-{v}-on-default` lookup.
+- Open-set theming at runtime: any new accent (e.g. `brand`) works with a single CSS rule that points the slot at a colour — `.hub-btn-brand { --hub-btn-accent: var(--hub-sys-color-brand); }` — and emphasis / subtle / on derive themselves. The open path no longer depends on the `@each` or on recompiling the library.
+
+### Changed
+
+- Canonical `zindex` token names (BREAKING): `--hub-fab-z-index` → `--hub-fab-zindex`, `--hub-dropdown-panel-z-index` → `--hub-dropdown-panel-zindex`, `--hub-speed-dial-z-index` → `--hub-speed-dial-zindex` (no hyphen, matching the `--hub-sys-zindex-*` convention).
+- Decoupled appearance from colour: the `solid` / `outline` / `soft` / `ghost` / `link` rules now consume ONLY the local `--hub-btn-accent*` slot family, so they are accent-agnostic and apply to any variant (known or user-registered).
+- Known-variant loop expanded from 5 to the 9 canonical accents — `primary, secondary, success, danger, warning, info, neutral, light, dark` — where each class only points `--hub-btn-accent` at its `--hub-sys-color-{variant}`.
+- `hub-btn-variant-rules(...)` no longer takes a `$type` argument; its colour defaults now read the local slot family instead of per-type `--hub-sys-color-{type}-*` tokens.
+- `hub-btn-color-rules($type)` now registers a variant by setting the local accent slot (one declaration) instead of emitting five appearance blocks.
+- Migrated every `color-mix(in srgb, …)` to `in oklch` (soft hover mix and the spinner border).
+
+### Removed
+
+- Per-variant role lookups (`--hub-sys-color-{type}-default` / `-emphasis` / `-subtle` / `-on-default`) from the component and mixins; the local slot now derives these roles, so the library consumes only the accent and the ds-provided `-on` contrast pattern.
+
 ## [22.3.1] - 2026-06-25
 
 ### Fixed

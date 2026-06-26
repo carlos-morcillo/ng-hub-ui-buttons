@@ -9,7 +9,7 @@
 	--hub-dropdown-panel-border-color: var(--hub-sys-color-border-subtle, #e2e8f0);
 	--hub-dropdown-panel-border-radius: var(--hub-sys-radius-md, 0.375rem);
 	--hub-dropdown-panel-shadow: var(--hub-sys-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.12));
-	--hub-dropdown-panel-z-index: var(--hub-sys-zindex-dropdown, 1000);
+	--hub-dropdown-panel-zindex: var(--hub-sys-zindex-dropdown, 1000);
 }
 
 :host {
@@ -22,7 +22,7 @@
 	border: 1px solid var(--hub-dropdown-panel-border-color);
 	border-radius: var(--hub-dropdown-panel-border-radius);
 	box-shadow: var(--hub-dropdown-panel-shadow);
-	z-index: var(--hub-dropdown-panel-z-index);
+	z-index: var(--hub-dropdown-panel-zindex);
 }
 
 // Semantic color top-border accent loop

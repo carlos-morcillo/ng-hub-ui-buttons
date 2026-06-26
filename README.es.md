@@ -239,12 +239,12 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 --hub-fab-shadow:             var(--hub-sys-shadow-md);
 --hub-fab-shadow-hover:       var(--hub-sys-shadow-lg);
 --hub-fab-offset:             1rem;
---hub-fab-z-index:            1030;
+--hub-fab-zindex:            1030;
 --hub-fab-transition:         box-shadow 0.2s ease, transform 0.15s ease;
 
 /* Speed Dial */
 --hub-speed-dial-gap:         0.625rem;
---hub-speed-dial-z-index:     1030;
+--hub-speed-dial-zindex:     1030;
 --hub-speed-dial-animation:   0.2s ease;
 
 /* Panel del dropdown */
@@ -255,7 +255,7 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 --hub-dropdown-panel-border-color:   var(--hub-sys-color-border-subtle, #e2e8f0);
 --hub-dropdown-panel-border-radius:  var(--hub-sys-radius-md, 0.5rem);
 --hub-dropdown-panel-shadow:         var(--hub-sys-shadow-lg);
---hub-dropdown-panel-z-index:        1000;
+--hub-dropdown-panel-zindex:        1000;
 
 /* Item del dropdown */
 --hub-dropdown-item-padding-x:          0.875rem;

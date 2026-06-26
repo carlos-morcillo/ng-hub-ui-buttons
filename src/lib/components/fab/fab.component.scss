@@ -13,7 +13,7 @@
 	--hub-fab-extended-radius: 1.75rem;
 	--hub-fab-extended-padding-x: 1.25rem;
 	--hub-fab-transition: box-shadow 0.2s ease, transform 0.15s ease;
-	--hub-fab-z-index: var(--hub-sys-zindex-fixed, 1030);
+	--hub-fab-zindex: var(--hub-sys-zindex-fixed, 1030);
 }
 
 // ── Base (hub-fab is on both the component host and the speed-dial inner button) ──
@@ -28,7 +28,7 @@
 	border: none;
 	cursor: pointer;
 	box-shadow: var(--hub-fab-shadow);
-	z-index: var(--hub-fab-z-index);
+	z-index: var(--hub-fab-zindex);
 	transition: var(--hub-fab-transition);
 	color: var(--hub-ref-color-white, #fff);
 	font-size: 1.4rem;

@@ -1,6 +1,6 @@
 :where(:host) {
 	--hub-speed-dial-gap: 0.625rem;
-	--hub-speed-dial-z-index: var(--hub-sys-zindex-fixed, 1030);
+	--hub-speed-dial-zindex: var(--hub-sys-zindex-fixed, 1030);
 	--hub-speed-dial-animation: 0.2s ease;
 }
 
@@ -10,7 +10,7 @@
 	flex-direction: column-reverse;
 	align-items: center;
 	gap: var(--hub-speed-dial-gap);
-	z-index: var(--hub-speed-dial-z-index);
+	z-index: var(--hub-speed-dial-zindex);
 }
 
 // Actions list (child element — Angular scopes via _ngcontent)

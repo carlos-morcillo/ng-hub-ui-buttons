@@ -12,6 +12,26 @@
 	--hub-button-transition: all 0.15s ease;
 	--hub-button-spinner-size: 0.875em;
 	--hub-button-disabled-opacity: var(--hub-sys-opacity-disabled, 0.65);
+
+	// ── Local accent slot + runtime-derived role family ───────────────────
+	// `--hub-btn-accent` is the single per-component input. Every visual role
+	// (emphasis / subtle / on) is derived LOCALLY from this slot with
+	// color-mix() / relative color, so the whole family recomputes at runtime
+	// whenever the accent changes — no recompilation, no per-variant tokens.
+	//
+	// OPEN-SET: a known variant only sets `--hub-btn-accent` (see the @each
+	// below). Any NEW accent works with ONE rule that sets the slot, e.g.:
+	//
+	//   .hub-btn[data-variant='brand'] { --hub-btn-accent: var(--hub-sys-color-brand); }
+	//
+	// emphasis / subtle / on are then derived here automatically — the open
+	// path never touches the @each.
+	--hub-btn-accent: var(--hub-sys-color-primary, #0d6efd);
+	--hub-btn-accent-emphasis: color-mix(in oklch, var(--hub-btn-accent) 80%, var(--hub-sys-color-ink, #212529));
+	--hub-btn-accent-subtle: color-mix(in oklch, var(--hub-btn-accent) 12%, var(--hub-sys-surface-page, #fff));
+	// Contrast / on-color: grayscale flip driven by the accent's own lightness.
+	// Dark accents (L < .62) resolve to white text; light accents to near-black.
+	--hub-btn-accent-on: oklch(from var(--hub-btn-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
 }
 
 // ── Base styles ───────────────────────────────────────────────────────────
@@ -73,7 +93,7 @@
 	display: inline-block;
 	width: var(--hub-button-spinner-size);
 	height: var(--hub-button-spinner-size);
-	border: 2px solid #{'color-mix(in srgb, currentColor 30%, transparent)'};
+	border: 2px solid #{'color-mix(in oklch, currentColor 30%, transparent)'};
 	border-top-color: currentColor;
 	border-radius: 50%;
 	animation: hub-btn-spin 0.7s linear infinite;
@@ -85,47 +105,55 @@
 	}
 }
 
-// ── Semantic color loops ──────────────────────────────────────────────────
-$hub-btn-types: primary, secondary, success, danger, warning, info;
+// ── Known-variant accent assignment (closed set, 9 canonical variants) ────
+// Each known class ONLY points the local accent slot at the matching sys
+// accent. The role family (-emphasis / -subtle / -on) is derived from the
+// slot in :where(:host) above, so this loop never enumerates roles.
+//
+// OPEN-SET guarantee: the visual rules below read ONLY the local slot, so a
+// consumer can register any new accent (e.g. `brand`) with a single rule
+// that sets `--hub-btn-accent` — emphasis / subtle / on derive themselves
+// and every appearance (solid/outline/soft/ghost/link) just works, with no
+// recompilation and without appearing in this @each.
+$hub-btn-types: primary, secondary, success, danger, warning, info, neutral, light, dark;
 
 @each $type in $hub-btn-types {
-	:host(.hub-btn-solid.hub-btn-#{$type}) {
-		@include hub-btn-variant-rules(
-			$type,
-			$bg: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
-			$color: var(--hub-sys-color-#{$type}-on-default, #fff),
-			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
-			$hover-bg: var(--hub-sys-color-#{$type}-emphasis),
-			$hover-border: var(--hub-sys-color-#{$type}-emphasis)
-		);
+	:host(.hub-btn-#{$type}) {
+		--hub-btn-accent: var(--hub-sys-color-#{$type}, var(--hub-sys-color-primary));
 	}
+}
 
-	:host(.hub-btn-outline.hub-btn-#{$type}) {
-		@include hub-btn-variant-rules(
-			$type,
-			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}))
-		);
-	}
+// ── Appearance rules (accent-agnostic — consume only the local slot) ──────
+:host(.hub-btn-solid) {
+	@include hub-btn-variant-rules(
+		$bg: var(--hub-btn-accent),
+		$color: var(--hub-btn-accent-on),
+		$border: var(--hub-btn-accent),
+		$hover-bg: var(--hub-btn-accent-emphasis),
+		$hover-border: var(--hub-btn-accent-emphasis)
+	);
+}
 
-	:host(.hub-btn-soft.hub-btn-#{$type}) {
-		@include hub-btn-variant-rules(
-			$type,
-			$bg: var(--hub-sys-color-#{$type}-subtle),
-			$hover-bg: color-mix(in srgb, var(--hub-sys-color-#{$type}-subtle) 80%, var(--hub-sys-color-#{$type}-default))
-		);
-	}
+:host(.hub-btn-outline) {
+	@include hub-btn-variant-rules($border: var(--hub-btn-accent));
+}
 
-	:host(.hub-btn-ghost.hub-btn-#{$type}) {
-		@include hub-btn-variant-rules($type);
-	}
+:host(.hub-btn-soft) {
+	@include hub-btn-variant-rules(
+		$bg: var(--hub-btn-accent-subtle),
+		$hover-bg: color-mix(in oklch, var(--hub-btn-accent-subtle) 80%, var(--hub-btn-accent))
+	);
+}
 
-	:host(.hub-btn-link.hub-btn-#{$type}) {
-		@include hub-btn-variant-rules(
-			$type,
-			$hover-bg: null,
-			$hover-color: var(--hub-sys-color-#{$type}-default),
-			$text-decoration: underline,
-			$padding-inline: 0.125rem
-		);
-	}
+:host(.hub-btn-ghost) {
+	@include hub-btn-variant-rules();
+}
+
+:host(.hub-btn-link) {
+	@include hub-btn-variant-rules(
+		$hover-bg: null,
+		$hover-color: var(--hub-btn-accent),
+		$text-decoration: underline,
+		$padding-inline: 0.125rem
+	);
 }

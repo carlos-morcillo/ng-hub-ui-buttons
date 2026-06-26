@@ -2,25 +2,31 @@
 //
 // Public API: two mixins.
 //
-//   hub-btn-variant-rules($type, ...)  ← generic primitive: full control
-//   hub-btn-color-rules($type)         ← convenience: all five built-in variants at once
+//   hub-btn-variant-rules(...)   ← generic primitive: full control
+//   hub-btn-color-rules($type)   ← convenience: register a new accent variant
 //
-// Token convention (required for each custom color):
-//   --hub-sys-color-{type}-default     main fill / border value
-//   --hub-sys-color-{type}-emphasis    darker accent for hover / active
-//   --hub-sys-color-{type}-subtle      tinted surface for soft fills / hover backgrounds
-//   --hub-sys-color-{type}-on-default  text color placed on top of -default
+// LOCAL ACCENT SLOT — the open-set contract
+// -----------------------------------------
+// The button reads a single per-component input, `--hub-btn-accent`, and derives
+// its whole role family from it AT RUNTIME (see button.component.scss):
 //
-// Usage — add "brand" color to all five built-in variants:
+//   --hub-btn-accent-emphasis = color-mix(in oklch, accent 80%, ink)
+//   --hub-btn-accent-subtle   = color-mix(in oklch, accent 12%, surface)
+//   --hub-btn-accent-on       = grayscale contrast flip of the accent
+//
+// Because every appearance rule (solid/outline/soft/ghost/link) consumes ONLY
+// these local slot tokens, registering a brand-new accent needs no knowledge of
+// roles and no recompilation — just point the slot at any colour:
+//
+//   .hub-btn-brand { --hub-btn-accent: var(--hub-sys-color-brand); }
+//
+// emphasis / subtle / on derive themselves and every appearance just works.
+//
+// Usage — register a "brand" accent on the canonical selector shape:
 //
 //   @use 'ng-hub-ui-buttons/styles' as hub;
 //
-//   :root {
-//     --hub-sys-color-brand-default:    #ff6b00;
-//     --hub-sys-color-brand-emphasis:   #cc5500;
-//     --hub-sys-color-brand-subtle:     #fff0e6;
-//     --hub-sys-color-brand-on-default: #fff;
-//   }
+//   :root { --hub-sys-color-brand: #ff6b00; }   // ds derives -emphasis/-subtle/-on
 //
 //   hub-button, [hubButton] {
 //     @include hub.hub-btn-color-rules('brand');
@@ -30,20 +36,21 @@
 //
 //   hub-button, [hubButton] {
 //     &.hub-btn-inverted.hub-btn-brand {
-//       @include hub.hub-btn-variant-rules('brand',
-//         $bg:          var(--hub-sys-color-brand-on-default),
-//         $color:       var(--hub-sys-color-brand-default),
-//         $border:      var(--hub-sys-color-brand-default),
-//         $hover-bg:    var(--hub-sys-color-brand-default),
-//         $hover-color: var(--hub-sys-color-brand-on-default)
+//       @include hub.hub-btn-variant-rules(
+//         $bg:          var(--hub-btn-accent-on),
+//         $color:       var(--hub-btn-accent),
+//         $border:      var(--hub-btn-accent),
+//         $hover-bg:    var(--hub-btn-accent),
+//         $hover-color: var(--hub-btn-accent-on)
 //       );
 //     }
 //   }
 
-/// Outputs button variant CSS rules for a given semantic color.
+/// Outputs button appearance CSS rules from the local accent slot.
 /// Parameter defaults match the ghost variant — override only the values that differ.
+/// All colour inputs read the `--hub-btn-accent*` slot family, so the rules are
+/// accent-agnostic and work for any variant, known or user-registered.
 ///
-/// @param {string} $type            - Color name; maps to --hub-sys-color-{type}-* tokens.
 /// @param {value}  $bg              - `background` in resting state.
 /// @param {value}  $color           - `color` in resting state.
 /// @param {value}  $border          - `border-color` in resting state.
@@ -53,11 +60,10 @@
 /// @param {value}  $text-decoration - Extra text-decoration (null = skip).
 /// @param {value}  $padding-inline  - Extra padding-inline override (null = skip).
 @mixin hub-btn-variant-rules(
-	$type,
 	$bg: transparent,
-	$color: var(--hub-sys-color-#{$type}-emphasis),
+	$color: var(--hub-btn-accent-emphasis),
 	$border: transparent,
-	$hover-bg: var(--hub-sys-color-#{$type}-subtle),
+	$hover-bg: var(--hub-btn-accent-subtle),
 	$hover-border: null,
 	$hover-color: null,
 	$text-decoration: null,
@@ -90,51 +96,17 @@
 	}
 }
 
-/// Generates class-based selectors for all five built-in button variants of a custom color.
-/// Must be called inside a selector block that targets hub-button or [hubButton]:
+/// Registers a new accent variant by pointing the local accent slot at its sys
+/// colour. The appearance rules baked into the component already read the slot,
+/// so this single declaration is enough — emphasis / subtle / on derive at
+/// runtime. Call inside a selector that targets hub-button or [hubButton]:
 ///
 ///   hub-button, [hubButton] {
 ///     @include hub-btn-color-rules('brand');
 ///   }
 ///
 @mixin hub-btn-color-rules($type) {
-	&.hub-btn-solid.hub-btn-#{$type} {
-		@include hub-btn-variant-rules(
-			$type,
-			$bg: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
-			$color: var(--hub-sys-color-#{$type}-on-default, #fff),
-			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type})),
-			$hover-bg: var(--hub-sys-color-#{$type}-emphasis),
-			$hover-border: var(--hub-sys-color-#{$type}-emphasis)
-		);
-	}
-
-	&.hub-btn-outline.hub-btn-#{$type} {
-		@include hub-btn-variant-rules(
-			$type,
-			$border: var(--hub-sys-color-#{$type}-default, var(--hub-sys-color-#{$type}))
-		);
-	}
-
-	&.hub-btn-soft.hub-btn-#{$type} {
-		@include hub-btn-variant-rules(
-			$type,
-			$bg: var(--hub-sys-color-#{$type}-subtle),
-			$hover-bg: color-mix(in srgb, var(--hub-sys-color-#{$type}-subtle) 80%, var(--hub-sys-color-#{$type}-default))
-		);
-	}
-
-	&.hub-btn-ghost.hub-btn-#{$type} {
-		@include hub-btn-variant-rules($type);
-	}
-
-	&.hub-btn-link.hub-btn-#{$type} {
-		@include hub-btn-variant-rules(
-			$type,
-			$hover-bg: null,
-			$hover-color: var(--hub-sys-color-#{$type}-default),
-			$text-decoration: underline,
-			$padding-inline: 0.125rem
-		);
+	&.hub-btn-#{$type} {
+		--hub-btn-accent: var(--hub-sys-color-#{$type}, var(--hub-sys-color-primary));
 	}
 }
