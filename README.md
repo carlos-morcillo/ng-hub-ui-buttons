@@ -46,7 +46,7 @@ This library is part of the **ng-hub-ui** ecosystem:
 
 ## Description
 
-`ng-hub-ui-buttons` is a zero-dependency button library for Angular 21+ standalone applications (peer: `ng-hub-ui-utils`). It ships `HubBtnComponent` and `HubBtnDirective` for in-flow buttons, `HubFabComponent` for fixed-viewport floating actions, `HubSpeedDialComponent` for expandable FAB menus, and `HubDropdownDirective` that attaches any `<ng-template>` panel to any trigger via the `OverlayService` — no CDK required. All inputs use the Angular Signals API. Every visual property is a CSS custom property so the entire system themes with a single stylesheet override.
+`ng-hub-ui-buttons` is a zero-dependency button library for Angular 21+ standalone applications (peer: `ng-hub-ui-utils`). It ships `HubButtonComponent` for in-flow buttons — usable as an element (`<hub-button>`) or as an attribute on a native host (`<button hubButton>` / `<a hubButton>`) — `HubFabComponent` for fixed-viewport floating actions, `HubSpeedDialComponent` for expandable FAB menus, and `HubDropdownDirective` that attaches any `<ng-template>` panel to any trigger via the `OverlayService` — no CDK required. All inputs use the Angular Signals API. Every visual property is a CSS custom property so the entire system themes with a single stylesheet override.
 
 ## Features
 
@@ -83,7 +83,7 @@ All exports are standalone — import only what you use:
 
 ```typescript
 import {
-    HubBtnComponent,
+    HubButtonComponent,
     HubDropdownDirective,
     HubDropdownPanelComponent,
     HubDropdownItemComponent
@@ -91,7 +91,7 @@ import {
 
 @Component({
     standalone: true,
-    imports: [HubBtnComponent, HubDropdownDirective, HubDropdownPanelComponent, HubDropdownItemComponent],
+    imports: [HubButtonComponent, HubDropdownDirective, HubDropdownPanelComponent, HubDropdownItemComponent],
     template: `
         <hub-button [hubDropdown]="menu" placement="bottom-start">Actions</hub-button>
 
@@ -110,7 +110,9 @@ export class MyComponent { }
 
 ## Components and Directives
 
-### `HubBtnComponent` — `<hub-button>`
+### `HubButtonComponent` — `<hub-button>` or `[hubButton]`
+
+A single component with a dual selector — use it as an **element** or as an **attribute** on a native host. Both forms share the same inputs and render the loading spinner.
 
 | Input | Type | Default | Description |
 |-------|------|---------|-------------|
@@ -121,14 +123,18 @@ export class MyComponent { }
 | `loading` | `boolean` | `false` | Shows spinner and blocks interaction |
 | `disabled` | `boolean` | `false` | Disables the button and sets the `disabled` attribute |
 
-### `HubBtnDirective` — `[hubButton]`
-
-Same inputs as `HubBtnComponent`. Apply to a native `<button>` or `<a>` element.
-
 ```html
+<!-- Element form -->
+<hub-button variant="solid" color="primary">Save</hub-button>
+
+<!-- Attribute form on a native host (recommended for real button semantics) -->
 <button hubButton variant="outline" color="success">Confirm</button>
 <a hubButton variant="link" color="primary" href="/docs">Read more</a>
 ```
+
+> **Tip:** prefer the attribute form on a native `<button>` / `<a>` when you need real button semantics (focus, keyboard activation, form submission). `<hub-button>` is a styling host without native button behaviour.
+>
+> **Deprecated aliases:** `HubBtnComponent` and `HubBtnDirective` still export (pointing to `HubButtonComponent`) for backward compatibility — migrate to `HubButtonComponent`.
 
 ### `HubFabComponent` — `<hub-fab>`
 

@@ -1,5 +1,16 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.5.0] - 2026-06-30
+
+### Changed
+
+- **`HubBtnComponent` renamed to `HubButtonComponent`.** `HubBtnComponent` is still exported as a deprecated alias, so existing imports keep working.
+- **`HubButtonComponent` now has a dual selector `hub-button, [hubButton]`** — the same component works both as an element (`<hub-button>`) and as an attribute on any native host (`<button hubButton>` / `<a hubButton>`). The attribute form now also renders the loading spinner (it is a real component template), which the old directive could not.
+
+### Deprecated
+
+- **`HubBtnDirective`** is removed and replaced by `HubButtonComponent` (which now matches `[hubButton]`). `HubBtnDirective` is still exported as a deprecated alias of `HubButtonComponent` for backward compatibility.
+
 ## [22.4.0] - 2026-06-26
 
 ### Added

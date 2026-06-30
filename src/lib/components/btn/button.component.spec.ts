@@ -1,15 +1,15 @@
-import { ComponentRef } from '@angular/core';
+import { Component, ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { HubBtnComponent } from './button.component';
+import { HubButtonComponent } from './button.component';
 
-describe('HubBtnComponent', () => {
-	let fixture: ComponentFixture<HubBtnComponent>;
-	let ref: ComponentRef<HubBtnComponent>;
+describe('HubButtonComponent', () => {
+	let fixture: ComponentFixture<HubButtonComponent>;
+	let ref: ComponentRef<HubButtonComponent>;
 	let el: HTMLElement;
 
 	beforeEach(async () => {
 		await TestBed.configureTestingModule({}).compileComponents();
-		fixture = TestBed.createComponent(HubBtnComponent);
+		fixture = TestBed.createComponent(HubButtonComponent);
 		ref = fixture.componentRef;
 		el = fixture.nativeElement;
 		fixture.detectChanges();
@@ -63,5 +63,43 @@ describe('HubBtnComponent', () => {
 		ref.setInput('disabled', true);
 		fixture.detectChanges();
 		expect(el.hasAttribute('disabled')).toBe(true);
+	});
+});
+
+@Component({
+	standalone: true,
+	imports: [HubButtonComponent],
+	template: `<button hubButton variant="outline" color="danger" [loading]="true">Go</button>`
+})
+class AttributeHostComponent {}
+
+describe('HubButtonComponent — [hubButton] attribute form', () => {
+	let btn: HTMLButtonElement;
+
+	beforeEach(async () => {
+		await TestBed.configureTestingModule({ imports: [AttributeHostComponent] }).compileComponents();
+		const fixture = TestBed.createComponent(AttributeHostComponent);
+		fixture.detectChanges();
+		btn = fixture.nativeElement.querySelector('button');
+	});
+
+	it('attaches to a native <button> without replacing the tag', () => {
+		expect(btn).toBeTruthy();
+		expect(btn.tagName).toBe('BUTTON');
+	});
+
+	it('applies the computed hub-btn classes to the native host', () => {
+		expect(btn.classList).toContain('hub-btn');
+		expect(btn.classList).toContain('hub-btn-outline');
+		expect(btn.classList).toContain('hub-btn-danger');
+		expect(btn.classList).toContain('hub-btn-loading');
+	});
+
+	it('renders the loading spinner inside the native button (component template)', () => {
+		expect(btn.querySelector('.hub-btn__spinner')).toBeTruthy();
+	});
+
+	it('projects the button label', () => {
+		expect(btn.textContent).toContain('Go');
 	});
 });

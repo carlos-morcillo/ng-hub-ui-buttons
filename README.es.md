@@ -46,7 +46,7 @@ Esta librería forma parte del ecosistema **ng-hub-ui**:
 
 ## Descripción
 
-`ng-hub-ui-buttons` es una librería de botones sin dependencias externas para aplicaciones Angular 21+ standalone (peer: `ng-hub-ui-utils`). Incluye `HubBtnComponent` y `HubBtnDirective` para botones en flujo, `HubFabComponent` para acciones flotantes en posición fija, `HubSpeedDialComponent` para menús FAB expandibles y `HubDropdownDirective` que adjunta cualquier `<ng-template>` a cualquier trigger mediante `OverlayService` — sin CDK. Todas las entradas usan la API de Signals de Angular. Cada propiedad visual es una CSS custom property, por lo que todo el sistema se tematiza con una sola hoja de estilos.
+`ng-hub-ui-buttons` es una librería de botones sin dependencias externas para aplicaciones Angular 21+ standalone (peer: `ng-hub-ui-utils`). Incluye `HubButtonComponent` para botones en flujo — usable como elemento (`<hub-button>`) o como atributo sobre un host nativo (`<button hubButton>` / `<a hubButton>`) — `HubFabComponent` para acciones flotantes en posición fija, `HubSpeedDialComponent` para menús FAB expandibles y `HubDropdownDirective` que adjunta cualquier `<ng-template>` a cualquier trigger mediante `OverlayService` — sin CDK. Todas las entradas usan la API de Signals de Angular. Cada propiedad visual es una CSS custom property, por lo que todo el sistema se tematiza con una sola hoja de estilos.
 
 ## Características
 
@@ -83,7 +83,7 @@ Todos los exports son standalone — importa solo lo que uses:
 
 ```typescript
 import {
-    HubBtnComponent,
+    HubButtonComponent,
     HubDropdownDirective,
     HubDropdownPanelComponent,
     HubDropdownItemComponent
@@ -91,7 +91,7 @@ import {
 
 @Component({
     standalone: true,
-    imports: [HubBtnComponent, HubDropdownDirective, HubDropdownPanelComponent, HubDropdownItemComponent],
+    imports: [HubButtonComponent, HubDropdownDirective, HubDropdownPanelComponent, HubDropdownItemComponent],
     template: `
         <hub-button [hubDropdown]="menu" placement="bottom-start">Acciones</hub-button>
 
@@ -110,7 +110,9 @@ export class MyComponent { }
 
 ## Componentes y directivas
 
-### `HubBtnComponent` — `<hub-button>`
+### `HubButtonComponent` — `<hub-button>` o `[hubButton]`
+
+Un único componente con selector dual — úsalo como **elemento** o como **atributo** sobre un host nativo. Ambas formas comparten los mismos inputs y renderizan el spinner de carga.
 
 | Input | Tipo | Por defecto | Descripción |
 |-------|------|-------------|-------------|
@@ -121,14 +123,18 @@ export class MyComponent { }
 | `loading` | `boolean` | `false` | Muestra spinner y bloquea la interacción |
 | `disabled` | `boolean` | `false` | Desactiva el botón y añade el atributo `disabled` |
 
-### `HubBtnDirective` — `[hubButton]`
-
-Mismos inputs que `HubBtnComponent`. Aplícalo sobre un `<button>` o `<a>` nativo.
-
 ```html
+<!-- Forma elemento -->
+<hub-button variant="solid" color="primary">Guardar</hub-button>
+
+<!-- Forma atributo sobre host nativo (recomendada para semántica de botón real) -->
 <button hubButton variant="outline" color="success">Confirmar</button>
 <a hubButton variant="link" color="primary" href="/docs">Leer más</a>
 ```
+
+> **Consejo:** usa la forma atributo sobre un `<button>` / `<a>` nativo cuando necesites semántica de botón real (foco, teclado, envío de formularios). `<hub-button>` es un host de estilo sin comportamiento de botón nativo.
+>
+> **Alias deprecados:** `HubBtnComponent` y `HubBtnDirective` se siguen exportando (apuntando a `HubButtonComponent`) por compatibilidad — migra a `HubButtonComponent`.
 
 ### `HubFabComponent` — `<hub-fab>`
 

@@ -2,19 +2,26 @@ import { ChangeDetectionStrategy, Component, HostBinding, computed, input } from
 import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button.types';
 
 /**
- * Styled button component. Applies hub-btn CSS classes computed from signal inputs.
- * Use <hub-button> when the element type can be this component, or [hubButton] directive
- * when a native element (button, a, etc.) must keep its tag.
+ * Styled button. Applies `hub-btn` CSS classes computed from signal inputs and
+ * renders an optional loading spinner around the projected content.
+ *
+ * Usable in two interchangeable forms from the same class:
+ * - As an element: `<hub-button variant="solid" color="primary">Save</hub-button>`.
+ * - As an attribute on any host: `<button hubButton>Save</button>` / `<a hubButton href="…">Link</a>`.
+ *
+ * Prefer the attribute form on a native `<button>` / `<a>` when you need real button
+ * semantics (focus, keyboard activation, form submission); the `<hub-button>` element is
+ * a styling host without native button behaviour.
  */
 @Component({
-	selector: 'hub-button',
+	selector: 'hub-button, [hubButton]',
 	standalone: true,
 	templateUrl: './button.component.html',
 	styleUrl: './button.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: { class: 'hub-btn' }
 })
-export class HubBtnComponent {
+export class HubButtonComponent {
 	/** Visual style of the button. */
 	variant = input<HubBtnVariant>('solid');
 
