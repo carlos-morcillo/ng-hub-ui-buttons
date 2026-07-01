@@ -1,5 +1,15 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.6.0] - 2026-06-30
+
+### Changed
+
+- **Icons in buttons are projected, not configured.** `<hub-button>` / `[hubButton]` stays icon-library agnostic: project a `<hub-icon>` (or any element) as the button's content. The icon's side follows the markup order (before the label = leading, after = trailing) and the icon/label gap is the `--hub-button-gap` token. No providers or renderer wiring — so there is intentionally **no** `icon` input.
+
+### Removed
+
+- **`iconOnly` input and the forced square layout (`:host(.hub-btn-icon)`)** _(breaking)_. A button now sizes to its content; for an icon-only button, project just the icon and set an `aria-label`. Symmetric padding keeps it visually balanced without a dedicated mode.
+
 ## [22.5.0] - 2026-06-30
 
 ### Changed

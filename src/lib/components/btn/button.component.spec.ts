@@ -47,11 +47,6 @@ describe('HubButtonComponent', () => {
 		expect(el.classList).toContain('hub-btn-outline');
 	});
 
-	it('should apply hub-btn-icon when iconOnly=true', () => {
-		ref.setInput('iconOnly', true);
-		fixture.detectChanges();
-		expect(el.classList).toContain('hub-btn-icon');
-	});
 
 	it('should apply hub-btn-loading when loading=true', () => {
 		ref.setInput('loading', true);

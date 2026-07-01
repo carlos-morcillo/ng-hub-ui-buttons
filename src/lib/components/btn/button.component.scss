@@ -82,12 +82,6 @@
 	--hub-button-font-size: var(--hub-ref-font-size-lg, 1.25rem);
 }
 
-// Icon-only: square aspect ratio
-:host(.hub-btn-icon) {
-	--hub-button-padding-x: var(--hub-button-padding-y);
-	aspect-ratio: 1;
-}
-
 // ── Spinner (child element — Angular scopes this correctly) ───────────────
 .hub-btn__spinner {
 	display: inline-block;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, input } from '@angular/core';
 import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button.types';
 
 /**
@@ -12,6 +12,16 @@ import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button
  * Prefer the attribute form on a native `<button>` / `<a>` when you need real button
  * semantics (focus, keyboard activation, form submission); the `<hub-button>` element is
  * a styling host without native button behaviour.
+ *
+ * **Icons:** project whatever you want as content — the button is icon-library
+ * agnostic. The icon's position follows the markup order, and the label/icon gap
+ * is the `--hub-button-gap` token:
+ *
+ * ```html
+ * <button hubButton><hub-icon name="floppy-disk" /> Save</button>
+ * <button hubButton>Next <hub-icon name="arrow-right" /></button>
+ * <button hubButton aria-label="Settings"><hub-icon name="gear" /></button>
+ * ```
  */
 @Component({
 	selector: 'hub-button, [hubButton]',
@@ -31,9 +41,6 @@ export class HubButtonComponent {
 	/** Size token. */
 	size = input<HubBtnSize>('md');
 
-	/** When true, enforces equal width/height (icon-only layout). */
-	iconOnly = input(false);
-
 	/** When true, shows a spinner and blocks pointer events. */
 	loading = input(false);
 
@@ -47,7 +54,6 @@ export class HubButtonComponent {
 			`hub-btn-${this.variant()}`,
 			`hub-btn-${this.color()}`,
 			`hub-btn-${this.size()}`,
-			this.iconOnly() ? 'hub-btn-icon' : '',
 			this.loading() ? 'hub-btn-loading' : '',
 			this.disabled() ? 'hub-btn-disabled' : ''
 		]
