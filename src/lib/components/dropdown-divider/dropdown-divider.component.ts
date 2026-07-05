@@ -16,8 +16,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 			:host {
 				display: block;
 				height: 1px;
-				background: var(--hub-dropdown-divider-color, var(--hub-sys-color-border-subtle, #e2e8f0));
-				margin: 0.25rem 0;
+				background: var(--hub-dropdown-divider-color, var(--hub-sys-color-border-subtle, #dee2e6));
+				margin: var(--hub-ref-space-1, 0.25rem) 0;
 			}
 		`
 	]

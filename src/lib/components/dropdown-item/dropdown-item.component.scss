@@ -4,7 +4,7 @@
 :where(:host) {
 	--hub-dropdown-item-padding-y: var(--hub-ref-space-2, 0.5rem);
 	--hub-dropdown-item-padding-x: var(--hub-ref-space-3, 1rem);
-	--hub-dropdown-item-hover-bg: var(--hub-sys-color-surface-subtle, #f8fafc);
+	--hub-dropdown-item-hover-bg: var(--hub-sys-color-surface-subtle, #f8f9fa);
 	--hub-dropdown-item-border-radius: var(--hub-sys-radius-sm, 0.25rem);
 	--hub-dropdown-item-disabled-opacity: 0.45;
 }

@@ -1,5 +1,21 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.7.0] - 2026-07-02
+
+### Added
+
+- **Speed-dial label tokens** `--hub-speed-dial-label-bg` (default `var(--hub-sys-color-ink, #212529)`) and `--hub-speed-dial-label-color` (default `var(--hub-sys-surface-page, #ffffff)`): theme-aware inverted pair for the tooltip-style item label chip.
+
+### Fixed
+
+- **Speed-dial and dropdown no longer crash SSR/prerender with `document is not defined`.** `HubSpeedDialComponent` and `HubDropdownDirective` subscribed to the global `document`'s `keydown` in their constructors (Escape-to-close), which threw a `ReferenceError` on the server and aborted rendering of any page containing them. The listeners now use the injected `DOCUMENT` and are only wired in the browser (`isPlatformBrowser` guard); the dropdown's scroll/click-outside handlers also use the injected `DOCUMENT`.
+- **Speed-dial item label rendered inverted when the ds tokens were loaded**: the chip is designed as a dark tooltip-style label, but it consumed `--hub-sys-color-surface-default` / `--hub-sys-text-primary` (white background + dark text with ds loaded). It now consumes the new `--hub-speed-dial-label-bg` / `--hub-speed-dial-label-color` tokens, which resolve to ink-on-surface — dark chip on light themes, light chip on dark themes.
+- **Token fallbacks realigned to the ds (ng-hub-ui-ds) light defaults**, so the with-ds and without-ds renders match: `--hub-sys-color-border-subtle` `#e2e8f0` → `#dee2e6`, `--hub-sys-color-text-subtle` `#94a3b8` → `#6c757d`, `--hub-sys-color-surface-subtle` `#f8fafc` → `#f8f9fa`, `--hub-sys-color-surface-default` `#fff` → `#ffffff`, `--hub-sys-shadow-sm` → `0 0.125rem 0.25rem rgba(0, 0, 0, 0.075)`, `--hub-sys-shadow-md` → `0 0.5rem 1rem rgba(0, 0, 0, 0.15)`, `--hub-sys-shadow-lg` → `0 1rem 3rem rgba(0, 0, 0, 0.175)`; white fallbacks normalized to the ds spelling `#ffffff`.
+
+### Changed
+
+- **Hardcoded style values now consume ds tokens** (same rendered value, ds-aligned fallback): dropdown panel border width → `var(--hub-ref-border-width, 1px)`, dropdown divider margin → `var(--hub-ref-space-1, 0.25rem)`, speed-dial item gap → `var(--hub-speed-dial-gap, 0.625rem)`, button transition → `var(--hub-sys-transition-fast, all 0.15s ease-in-out)`.
+
 ## [22.6.0] - 2026-06-30
 
 ### Changed

@@ -6,8 +6,8 @@
 	--hub-fab-size-standard: 3.5rem;
 	--hub-fab-size-large: 4.5rem;
 	--hub-fab-border-radius: 50%;
-	--hub-fab-shadow: var(--hub-sys-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
-	--hub-fab-shadow-hover: var(--hub-sys-shadow-lg, 0 8px 24px rgba(0, 0, 0, 0.18));
+	--hub-fab-shadow: var(--hub-sys-shadow-md, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+	--hub-fab-shadow-hover: var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
 	--hub-fab-offset: var(--hub-ref-space-3, 1rem);
 	--hub-fab-extended-height: 3.5rem;
 	--hub-fab-extended-radius: 1.75rem;
@@ -30,7 +30,7 @@
 	box-shadow: var(--hub-fab-shadow);
 	z-index: var(--hub-fab-zindex);
 	transition: var(--hub-fab-transition);
-	color: var(--hub-ref-color-white, #fff);
+	color: var(--hub-ref-color-white, #ffffff);
 	font-size: 1.4rem;
 
 	&:hover {

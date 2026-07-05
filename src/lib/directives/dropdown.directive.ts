@@ -1,7 +1,9 @@
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
 	DestroyRef,
 	Directive,
 	ElementRef,
+	PLATFORM_ID,
 	TemplateRef,
 	ViewContainerRef,
 	inject,
@@ -53,14 +55,18 @@ export class HubDropdownDirective {
 	private readonly _vcr = inject(ViewContainerRef);
 	private readonly _overlay = inject(OverlayService);
 	private readonly _destroyRef = inject(DestroyRef);
+	private readonly _document = inject(DOCUMENT);
 
 	constructor() {
-		fromEvent<KeyboardEvent>(document, 'keydown')
-			.pipe(
-				filter((e) => e.key === 'Escape' && this.isOpen()),
-				takeUntilDestroyed(this._destroyRef)
-			)
-			.subscribe(() => this.close());
+		// Escape-to-close relies on DOM events; inert on the server (SSR/prerender).
+		if (isPlatformBrowser(inject(PLATFORM_ID))) {
+			fromEvent<KeyboardEvent>(this._document, 'keydown')
+				.pipe(
+					filter((e) => e.key === 'Escape' && this.isOpen()),
+					takeUntilDestroyed(this._destroyRef)
+				)
+				.subscribe(() => this.close());
+		}
 	}
 
 	/** Open the dropdown and mount the overlay. */
@@ -90,12 +96,12 @@ export class HubDropdownDirective {
 		this.opened.emit();
 
 		// Close on scroll so the panel stays aligned with the trigger
-		fromEvent(document, 'scroll', { passive: true, capture: true })
+		fromEvent(this._document, 'scroll', { passive: true, capture: true })
 			.pipe(take(1), takeUntilDestroyed(this._destroyRef))
 			.subscribe(() => this.close());
 
 		// Click-outside detection (document-level)
-		fromEvent<MouseEvent>(document, 'click')
+		fromEvent<MouseEvent>(this._document, 'click')
 			.pipe(
 				filter((e) => !this._el.nativeElement.contains(e.target as Node) && !!this._overlayRef?.hasAttached()),
 				take(1),

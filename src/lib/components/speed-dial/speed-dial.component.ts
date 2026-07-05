@@ -1,4 +1,15 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, HostBinding, inject, input, model, output } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import {
+	ChangeDetectionStrategy,
+	Component,
+	DestroyRef,
+	HostBinding,
+	PLATFORM_ID,
+	inject,
+	input,
+	model,
+	output
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { fromEvent } from 'rxjs';
 import { filter } from 'rxjs/operators';
@@ -42,12 +53,15 @@ export class HubSpeedDialComponent {
 	}
 
 	constructor() {
-		fromEvent<KeyboardEvent>(document, 'keydown')
-			.pipe(
-				filter((e) => e.key === 'Escape' && this.isOpen()),
-				takeUntilDestroyed(this._destroyRef)
-			)
-			.subscribe(() => this.close());
+		// Escape-to-close relies on DOM events; inert on the server (SSR/prerender).
+		if (isPlatformBrowser(inject(PLATFORM_ID))) {
+			fromEvent<KeyboardEvent>(inject(DOCUMENT), 'keydown')
+				.pipe(
+					filter((e) => e.key === 'Escape' && this.isOpen()),
+					takeUntilDestroyed(this._destroyRef)
+				)
+				.subscribe(() => this.close());
+		}
 	}
 
 	/** Toggle the speed dial open/closed. */

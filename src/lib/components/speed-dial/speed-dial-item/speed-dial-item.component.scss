@@ -1,19 +1,28 @@
+// ── Token defaults (zero specificity — any consumer rule wins) ────────────
+:where(:host) {
+	// Tooltip-style label chip: theme-aware inverted pair (ink on surface),
+	// so the chip stays dark-on-light in light themes and light-on-dark in
+	// dark themes — like a tooltip.
+	--hub-speed-dial-label-bg: var(--hub-sys-color-ink, #212529);
+	--hub-speed-dial-label-color: var(--hub-sys-surface-page, #ffffff);
+}
+
 :host {
 	display: flex;
 	align-items: center;
-	gap: 0.625rem;
+	gap: var(--hub-speed-dial-gap, 0.625rem);
 }
 
 // Child elements — Angular scopes these via _ngcontent automatically
 .hub-speed-dial-item__label {
 	font-size: 0.8rem;
 	font-weight: var(--hub-ref-font-weight-medium, 500);
-	background: var(--hub-sys-color-surface-default, #1e293b);
-	color: var(--hub-sys-text-primary, #fff);
+	background: var(--hub-speed-dial-label-bg);
+	color: var(--hub-speed-dial-label-color);
 	padding: 0.1875rem 0.5rem;
 	border-radius: 0.3125rem;
 	white-space: nowrap;
-	box-shadow: var(--hub-sys-shadow-sm, 0 2px 6px rgba(0, 0, 0, 0.12));
+	box-shadow: var(--hub-sys-shadow-sm, 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075));
 }
 
 .hub-speed-dial-item__btn {
@@ -26,8 +35,8 @@
 	align-items: center;
 	justify-content: center;
 	font-size: 1.1rem;
-	background: var(--hub-sys-color-surface-default, #fff);
-	box-shadow: var(--hub-sys-shadow-md, 0 4px 12px rgba(0, 0, 0, 0.15));
+	background: var(--hub-sys-color-surface-default, #ffffff);
+	box-shadow: var(--hub-sys-shadow-md, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 	transition: transform 0.15s ease;
 
 	&:hover {
