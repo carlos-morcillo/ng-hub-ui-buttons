@@ -51,7 +51,7 @@ Esta librería forma parte del ecosistema **ng-hub-ui**:
 ## Características
 
 - **API basada en Signals** — todas las entradas usan `input()`, `model()` y `output()`; compatible con `OnPush` y aplicaciones zoneless.
-- **Cinco variantes × seis colores** — `solid`, `outline`, `soft`, `ghost` y `link`, disponibles en `primary`, `secondary`, `success`, `danger`, `warning` e `info`.
+- **Cinco variantes × nueve colores** — `solid`, `outline`, `soft`, `ghost` y `link`, disponibles en `primary`, `secondary`, `success`, `danger`, `warning`, `info`, `neutral`, `light` y `dark`.
 - **Cuatro tamaños** — `sm`, `md`, `lg`, `xl` con padding y fuente proporcionales.
 - **FAB con nueve posiciones** — posicionamiento fijo en cualquier esquina, centro de borde o centro de pantalla con propiedades lógicas CSS (compatible con RTL).
 - **Speed Dial** — menú FAB expandible con modelo bidireccional `isOpen`, expansión direccional y cierre con Escape.
@@ -117,10 +117,9 @@ Un único componente con selector dual — úsalo como **elemento** o como **atr
 | Input | Tipo | Por defecto | Descripción |
 |-------|------|-------------|-------------|
 | `variant` | `solid \| outline \| soft \| ghost \| link` | `solid` | Estilo visual |
-| `color` | `primary \| secondary \| success \| danger \| warning \| info` | `primary` | Color semántico |
+| `color` | `HubSemanticColor` — los nueve integrados (`primary \| secondary \| success \| danger \| warning \| info \| neutral \| light \| dark`) **o cualquier acento personalizado** registrado con `hub-btn-color-rules()` | `primary` | Color semántico (conjunto abierto) |
 | `size` | `sm \| md \| lg \| xl` | `md` | Escala de tamaño |
-| `iconOnly` | `boolean` | `false` | Botón cuadrado con padding igual para iconos |
-| `loading` | `boolean` | `false` | Muestra spinner y bloquea la interacción |
+| `loading` | `boolean` | `false` | Muestra el spinner y marca el botón **ocupado + deshabilitado** — no enfocable, inerte a puntero/teclado, refleja `aria-busy="true"` y el atributo `disabled` |
 | `disabled` | `boolean` | `false` | Desactiva el botón y añade el atributo `disabled` |
 
 ```html
@@ -132,9 +131,26 @@ Un único componente con selector dual — úsalo como **elemento** o como **atr
 <a hubButton variant="link" color="primary" href="/docs">Leer más</a>
 ```
 
-> **Consejo:** usa la forma atributo sobre un `<button>` / `<a>` nativo cuando necesites semántica de botón real (foco, teclado, envío de formularios). `<hub-button>` es un host de estilo sin comportamiento de botón nativo.
+> **Consejo:** usa la forma atributo sobre un `<button>` / `<a>` nativo cuando necesites semántica de botón real (foco, teclado, envío de formularios). La forma elemento `<hub-button>` es un host de estilo, pero se anuncia con `role="button"`, un `tabindex` enfocable y activación con Enter/Espacio para seguir siendo accesible por teclado; como entonces se comporta como un botón, no lo anides dentro de otro elemento interactivo.
 >
 > **Alias deprecados:** `HubBtnComponent` y `HubBtnDirective` se siguen exportando (apuntando a `HubButtonComponent`) por compatibilidad — migra a `HubButtonComponent`.
+
+#### Estado loading / ocupado
+
+```html
+<button hubButton color="primary" [loading]="saving()">Guardar</button>
+```
+
+Mientras `loading` es `true` el botón muestra un spinner animado y queda totalmente inerte: refleja `aria-busy="true"` y el atributo `disabled` nativo, sale del orden de tabulación e ignora la activación por puntero y teclado — así un envío en curso no se dispara dos veces.
+
+El glifo del spinner es el token intercambiable `--hub-button-spinner` (un `url("data:image/svg+xml,…")` pintado con `mask`, por lo que hereda el color de texto del botón). Apúntalo a cualquier SVG para sustituir el loader, y ajusta `--hub-button-spinner-duration` / `--hub-button-spinner-size`:
+
+```css
+hub-button, [hubButton] {
+    --hub-button-spinner: url("data:image/svg+xml,%3Csvg …%3E"); /* tu loader */
+    --hub-button-spinner-duration: 1s;
+}
+```
 
 ### `HubFabComponent` — `<hub-fab>`
 
@@ -235,7 +251,17 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 --hub-button-gap:               0.375rem;
 --hub-button-transition:        all 0.15s ease;
 --hub-button-spinner-size:      0.875em;
+--hub-button-spinner-duration:  0.7s;
+--hub-button-spinner:           url("data:image/svg+xml,…"); /* el glifo de carga — cámbialo por cualquier SVG */
 --hub-button-disabled-opacity:  0.55;
+
+/* Slots de interacción del botón (familias hover / pressed reconfigurables) */
+--hub-btn-hover-bg:       var(--hub-btn-accent-subtle);
+--hub-btn-hover-border:   transparent;
+--hub-btn-hover-color:    var(--hub-btn-accent-emphasis);
+--hub-btn-active-bg:      color-mix(in oklch, var(--hub-btn-accent) 70%, var(--hub-sys-color-ink, #212529));
+--hub-btn-active-border:  transparent;
+--hub-btn-active-color:   var(--hub-btn-accent-on);
 
 /* FAB */
 --hub-fab-size-mini:          2.5rem;
@@ -256,17 +282,17 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 /* Panel del dropdown */
 --hub-dropdown-panel-min-width:      11.25rem;
 --hub-dropdown-panel-max-height:     20rem;
---hub-dropdown-panel-padding-y:      0.25rem;
---hub-dropdown-panel-bg:             var(--hub-sys-color-surface-default, #fff);
---hub-dropdown-panel-border-color:   var(--hub-sys-color-border-subtle, #e2e8f0);
---hub-dropdown-panel-border-radius:  var(--hub-sys-radius-md, 0.5rem);
---hub-dropdown-panel-shadow:         var(--hub-sys-shadow-lg);
---hub-dropdown-panel-zindex:        1000;
+--hub-dropdown-panel-padding-y:      var(--hub-ref-space-1, 0.25rem);
+--hub-dropdown-panel-bg:             var(--hub-sys-color-surface-default, #ffffff);
+--hub-dropdown-panel-border-color:   var(--hub-sys-color-border-subtle, #dee2e6);
+--hub-dropdown-panel-border-radius:  var(--hub-sys-radius-md, 0.375rem);
+--hub-dropdown-panel-shadow:         var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
+--hub-dropdown-panel-zindex:        var(--hub-sys-zindex-dropdown, 1000);
 
 /* Item del dropdown */
---hub-dropdown-item-padding-x:          0.875rem;
---hub-dropdown-item-padding-y:          0.4375rem;
---hub-dropdown-item-hover-bg:           var(--hub-sys-color-surface-subtle, #f8fafc);
+--hub-dropdown-item-padding-x:          var(--hub-ref-space-3, 1rem);
+--hub-dropdown-item-padding-y:          var(--hub-ref-space-2, 0.5rem);
+--hub-dropdown-item-hover-bg:           var(--hub-sys-color-surface-subtle, #f8f9fa);
 --hub-dropdown-item-border-radius:      var(--hub-sys-radius-sm, 0.25rem);
 --hub-dropdown-item-disabled-opacity:   0.45;
 ```
@@ -285,12 +311,15 @@ Registra colores semánticos personalizados sin modificar la librería. Importa 
 
 ### Añadir un color personalizado a las cinco variantes de botón
 
+`hub-btn-color-rules('brand')` apunta el slot local `--hub-btn-accent` a
+`--hub-sys-color-brand`. Solo defines ese **único** valor — el botón deriva toda
+la familia de roles (`-emphasis` / `-subtle` / `-on`) en runtime, así que cada
+apariencia (solid/outline/soft/ghost/link) funciona y `color="brand"` compila
+(el input `color` es un conjunto abierto):
+
 ```scss
 :root {
-    --hub-sys-color-brand-default:    #ff6b00;
-    --hub-sys-color-brand-emphasis:   #cc5500;
-    --hub-sys-color-brand-subtle:     #fff0e6;
-    --hub-sys-color-brand-on-default: #fff;
+    --hub-sys-color-brand: #ff6b00; // el único acento — con eso basta
 }
 
 hub-button, [hubButton] {
@@ -300,17 +329,20 @@ hub-button, [hubButton] {
 
 ### Crear una variante completamente personalizada
 
-`hub-btn-variant-rules` es el primitivo genérico. Sus defaults coinciden con la variante `ghost` — solo sobreescribe lo que difiera:
+`hub-btn-variant-rules` es el primitivo genérico — **todos los parámetros van con
+nombre** (no hay `$type` posicional). Sus defaults coinciden con la variante
+`ghost` y cada color lee la familia local `--hub-btn-accent*`, así que es
+agnóstico al acento. Sobreescribe solo lo que difiera:
 
 ```scss
 hub-button, [hubButton] {
     &.hub-btn-inverted.hub-btn-brand {
-        @include hub.hub-btn-variant-rules('brand',
-            $bg:          var(--hub-sys-color-brand-on-default),
-            $color:       var(--hub-sys-color-brand-default),
-            $border:      var(--hub-sys-color-brand-default),
-            $hover-bg:    var(--hub-sys-color-brand-default),
-            $hover-color: var(--hub-sys-color-brand-on-default)
+        @include hub.hub-btn-variant-rules(
+            $bg:          var(--hub-btn-accent-on),
+            $color:       var(--hub-btn-accent),
+            $border:      var(--hub-btn-accent),
+            $hover-bg:    var(--hub-btn-accent),
+            $hover-color: var(--hub-btn-accent-on)
         );
     }
 }
@@ -320,8 +352,8 @@ hub-button, [hubButton] {
 
 | Mixin | Contexto | Descripción |
 |---|---|---|
-| `hub-btn-variant-rules($type, ...)` | bloque `hub-button, [hubButton]` | Primitivo genérico — todas las propiedades de variante como parámetros con nombre |
-| `hub-btn-color-rules($type)` | bloque `hub-button, [hubButton]` | Genera las cinco variantes built-in para un color personalizado |
+| `hub-btn-variant-rules($bg, $color, $border, $hover-*, $active-*, …)` | dentro de un selector de variante `hub-button, [hubButton]` | Primitivo genérico — cada propiedad de apariencia como parámetro **con nombre** (sin `$type` posicional) |
+| `hub-btn-color-rules($type)` | bloque `hub-button, [hubButton]` | Registra un acento personalizado (`--hub-btn-accent` → `--hub-sys-color-$type`); las cinco apariencias derivan de él |
 | `hub-fab-color($type)` | raíz | Regla global `.hub-fab-{type}` |
 | `hub-dropdown-panel-color($type)` | raíz | Regla global de color para `hub-dropdown-panel` |
 | `hub-dropdown-panel-color-rules($type)` | dentro de selector `hub-dropdown-panel` | Solo propiedades CSS — tú eliges el selector |

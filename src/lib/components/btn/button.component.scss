@@ -9,8 +9,14 @@
 	--hub-button-font-size: var(--hub-ref-font-size-base, 1rem);
 	--hub-button-font-weight: var(--hub-ref-font-weight-medium, 500);
 	--hub-button-gap: var(--hub-ref-space-2, 0.5rem);
-	--hub-button-transition: all 0.15s ease;
+	--hub-button-transition: var(--hub-sys-transition-fast, all 0.15s ease-in-out);
 	--hub-button-spinner-size: 0.875em;
+	--hub-button-spinner-duration: 0.7s;
+	// The loading glyph itself — a swappable SVG. Painted through `mask`, so its
+	// colour follows the button text (`currentColor`) and only the SVG's alpha
+	// matters. Point this at any `url("data:image/svg+xml,…")` to replace the
+	// spinner (a custom brand loader, a set of dots, an icon-font glyph, …).
+	--hub-button-spinner: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='none' stroke='%23000' stroke-width='3' stroke-linecap='round' d='M12 3a9 9 0 1 0 9 9'/%3E%3C/svg%3E");
 	--hub-button-disabled-opacity: var(--hub-sys-opacity-disabled, 0.65);
 
 	// ── Local accent slot + runtime-derived role family ───────────────────
@@ -28,10 +34,22 @@
 	// path never touches the @each.
 	--hub-btn-accent: var(--hub-sys-color-primary, #0d6efd);
 	--hub-btn-accent-emphasis: color-mix(in oklch, var(--hub-btn-accent) 80%, var(--hub-sys-color-ink, #212529));
-	--hub-btn-accent-subtle: color-mix(in oklch, var(--hub-btn-accent) 12%, var(--hub-sys-surface-page, #fff));
+	--hub-btn-accent-subtle: color-mix(in oklch, var(--hub-btn-accent) 12%, var(--hub-sys-surface-page, #ffffff));
 	// Contrast / on-color: grayscale flip driven by the accent's own lightness.
 	// Dark accents (L < .62) resolve to white text; light accents to near-black.
 	--hub-btn-accent-on: oklch(from var(--hub-btn-accent) clamp(0, (0.62 - l) * 1000, 1) 0 h);
+
+	// ── Interaction slots (overridable hover / pressed families) ──────────
+	// Each interaction property is a slot so consumers can retune a single
+	// hover/pressed colour without recompiling. Defaults reproduce the ghost
+	// hover look; each appearance re-points the slots it needs (see below).
+	// The pressed default deepens the accent toward the contextual ink.
+	--hub-btn-hover-bg: var(--hub-btn-accent-subtle);
+	--hub-btn-hover-border: transparent;
+	--hub-btn-hover-color: var(--hub-btn-accent-emphasis);
+	--hub-btn-active-bg: color-mix(in oklch, var(--hub-btn-accent) 70%, var(--hub-sys-color-ink, #212529));
+	--hub-btn-active-border: transparent;
+	--hub-btn-active-color: var(--hub-btn-accent-on);
 }
 
 // ── Base styles ───────────────────────────────────────────────────────────
@@ -87,10 +105,19 @@
 	display: inline-block;
 	width: var(--hub-button-spinner-size);
 	height: var(--hub-button-spinner-size);
-	border: 2px solid #{'color-mix(in oklch, currentColor 30%, transparent)'};
-	border-top-color: currentColor;
-	border-radius: 50%;
-	animation: hub-btn-spin 0.7s linear infinite;
+	// The SVG comes from `--hub-button-spinner` and is tinted with the current text
+	// colour via `mask` (only the glyph's alpha shows through). Swap the token to
+	// replace the loader with any SVG; the rotation keeps it in motion.
+	background-color: currentColor;
+	-webkit-mask: var(--hub-button-spinner) center / contain no-repeat;
+	mask: var(--hub-button-spinner) center / contain no-repeat;
+	animation: hub-btn-spin var(--hub-button-spinner-duration, 0.7s) linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.hub-btn__spinner {
+		animation-duration: 1.6s;
+	}
 }
 
 @keyframes hub-btn-spin {
@@ -124,29 +151,45 @@ $hub-btn-types: primary, secondary, success, danger, warning, info, neutral, lig
 		$color: var(--hub-btn-accent-on),
 		$border: var(--hub-btn-accent),
 		$hover-bg: var(--hub-btn-accent-emphasis),
-		$hover-border: var(--hub-btn-accent-emphasis)
+		$hover-border: var(--hub-btn-accent-emphasis),
+		$hover-color: var(--hub-btn-accent-on),
+		$active-border: var(--hub-btn-active-bg),
+		$active-color: var(--hub-btn-accent-on)
 	);
 }
 
 :host(.hub-btn-outline) {
-	@include hub-btn-variant-rules($border: var(--hub-btn-accent));
+	@include hub-btn-variant-rules(
+		$border: var(--hub-btn-accent),
+		$hover-border: var(--hub-btn-accent),
+		$active-bg: color-mix(in oklch, var(--hub-btn-accent-subtle) 70%, var(--hub-btn-accent)),
+		$active-border: var(--hub-btn-accent),
+		$active-color: var(--hub-btn-accent-emphasis)
+	);
 }
 
 :host(.hub-btn-soft) {
 	@include hub-btn-variant-rules(
 		$bg: var(--hub-btn-accent-subtle),
-		$hover-bg: color-mix(in oklch, var(--hub-btn-accent-subtle) 80%, var(--hub-btn-accent))
+		$hover-bg: color-mix(in oklch, var(--hub-btn-accent-subtle) 80%, var(--hub-btn-accent)),
+		$active-bg: color-mix(in oklch, var(--hub-btn-accent-subtle) 60%, var(--hub-btn-accent)),
+		$active-color: var(--hub-btn-accent-emphasis)
 	);
 }
 
 :host(.hub-btn-ghost) {
-	@include hub-btn-variant-rules();
+	@include hub-btn-variant-rules(
+		$active-bg: color-mix(in oklch, var(--hub-btn-accent-subtle) 80%, var(--hub-btn-accent)),
+		$active-color: var(--hub-btn-accent-emphasis)
+	);
 }
 
 :host(.hub-btn-link) {
 	@include hub-btn-variant-rules(
-		$hover-bg: null,
+		$hover-bg: transparent,
 		$hover-color: var(--hub-btn-accent),
+		$active-bg: transparent,
+		$active-color: color-mix(in oklch, var(--hub-btn-accent) 70%, var(--hub-sys-color-ink, #212529)),
 		$text-decoration: underline,
 		$padding-inline: 0.125rem
 	);

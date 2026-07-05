@@ -47,25 +47,42 @@
 //   }
 
 /// Outputs button appearance CSS rules from the local accent slot.
-/// Parameter defaults match the ghost variant — override only the values that differ.
-/// All colour inputs read the `--hub-btn-accent*` slot family, so the rules are
-/// accent-agnostic and work for any variant, known or user-registered.
+/// Parameter defaults match the ghost variant's resting/hover look — override
+/// only the values that differ. All colour inputs read the `--hub-btn-accent*`
+/// slot family, so the rules are accent-agnostic and work for any variant, known
+/// or user-registered.
+///
+/// INTERACTION SLOTS — the hover/active states are fully overridable
+/// -----------------------------------------------------------------
+/// The `:hover` and `:active` branches ALWAYS consume the overridable slots
+/// `--hub-btn-hover-*` / `--hub-btn-active-*` (defaults declared on the host in
+/// button.component.scss). Each `$hover-*` / `$active-*` parameter, when given,
+/// simply re-points the matching slot for this appearance, so a consumer can
+/// retune any interaction colour by setting the CSS variable — no recompilation:
+///
+///   hub-button.hub-btn-solid { --hub-btn-hover-bg: rebeccapurple; }
 ///
 /// @param {value}  $bg              - `background` in resting state.
 /// @param {value}  $color           - `color` in resting state.
 /// @param {value}  $border          - `border-color` in resting state.
-/// @param {value}  $hover-bg        - `background` on hover (null = skip).
-/// @param {value}  $hover-border    - `border-color` on hover (null = skip).
-/// @param {value}  $hover-color     - `color` on hover (null = skip).
+/// @param {value}  $hover-bg        - Override for `--hub-btn-hover-bg` (null = keep host default).
+/// @param {value}  $hover-border    - Override for `--hub-btn-hover-border` (null = keep host default).
+/// @param {value}  $hover-color     - Override for `--hub-btn-hover-color` (null = keep host default).
+/// @param {value}  $active-bg       - Override for `--hub-btn-active-bg` (null = keep host default).
+/// @param {value}  $active-border   - Override for `--hub-btn-active-border` (null = keep host default).
+/// @param {value}  $active-color    - Override for `--hub-btn-active-color` (null = keep host default).
 /// @param {value}  $text-decoration - Extra text-decoration (null = skip).
 /// @param {value}  $padding-inline  - Extra padding-inline override (null = skip).
 @mixin hub-btn-variant-rules(
 	$bg: transparent,
 	$color: var(--hub-btn-accent-emphasis),
 	$border: transparent,
-	$hover-bg: var(--hub-btn-accent-subtle),
+	$hover-bg: null,
 	$hover-border: null,
 	$hover-color: null,
+	$active-bg: null,
+	$active-border: null,
+	$active-color: null,
 	$text-decoration: null,
 	$padding-inline: null
 ) {
@@ -81,18 +98,42 @@
 		padding-inline: $padding-inline;
 	}
 
+	// Per-appearance overrides of the interaction slots. When a value is given it
+	// re-points the slot for this appearance; when null the host default stands.
+	@if $hover-bg {
+		--hub-btn-hover-bg: #{$hover-bg};
+	}
+
+	@if $hover-border {
+		--hub-btn-hover-border: #{$hover-border};
+	}
+
+	@if $hover-color {
+		--hub-btn-hover-color: #{$hover-color};
+	}
+
+	@if $active-bg {
+		--hub-btn-active-bg: #{$active-bg};
+	}
+
+	@if $active-border {
+		--hub-btn-active-border: #{$active-border};
+	}
+
+	@if $active-color {
+		--hub-btn-active-color: #{$active-color};
+	}
+
 	&:hover:not([disabled]):not(.hub-btn-disabled) {
-		@if $hover-bg {
-			background: $hover-bg;
-		}
+		background: var(--hub-btn-hover-bg);
+		border-color: var(--hub-btn-hover-border);
+		color: var(--hub-btn-hover-color);
+	}
 
-		@if $hover-border {
-			border-color: $hover-border;
-		}
-
-		@if $hover-color {
-			color: $hover-color;
-		}
+	&:active:not([disabled]):not(.hub-btn-disabled) {
+		background: var(--hub-btn-active-bg);
+		border-color: var(--hub-btn-active-border);
+		color: var(--hub-btn-active-color);
 	}
 }
 

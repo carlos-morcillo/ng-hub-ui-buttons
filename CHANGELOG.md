@@ -1,5 +1,20 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.8.0] - 2026-07-05
+
+### Added
+
+- **Open-set colour API.** `HubSemanticColor` is now `HubSemanticBuiltinColor | (string & {})`: the nine built-in accents (`primary`, `secondary`, `success`, `danger`, `warning`, `info`, and now `neutral`, `light`, `dark` — which the accent loop and the `--hub-sys-color-{neutral,light,dark}` ds tokens already emitted) **plus any custom string**. A product can register a bespoke accent with `hub-btn-color-rules('brand')` (or a bare `--hub-btn-accent` rule) and use `<hub-button color="brand">` with no cast — the button derives the whole role family from the single slot at runtime. The new `HubSemanticBuiltinColor` type is exported for iterating the canonical set.
+- **`loading` now fully disables the button.** In addition to the spinner, a loading button reflects `aria-busy="true"` and the native `disabled` attribute, drops out of the tab order (`tabindex="-1"` on the element form) and ignores pointer and keyboard activation — so an in-flight submit cannot fire twice. Previously `loading` only set `pointer-events: none`, leaving keyboard activation and form submission live.
+- **Swappable SVG spinner via `--hub-button-spinner`.** The loading glyph is now an SVG exposed as a CSS variable (`--hub-button-spinner`, a `url("data:image/svg+xml,…")` painted through `mask` so it inherits the button's `currentColor`), with `--hub-button-spinner-duration` for the spin speed (and the existing `--hub-button-spinner-size`). Point the token at any SVG to replace the loader — no recompilation. Replaces the previous hard-coded CSS-border spinner. Honours `prefers-reduced-motion` by slowing the spin.
+- **Overridable hover / pressed token slots** on the button. Hover is now driven by `--hub-btn-hover-bg` (default `var(--hub-btn-accent-subtle)`), `--hub-btn-hover-border` (default `transparent`) and `--hub-btn-hover-color` (default `var(--hub-btn-accent-emphasis)`); a new pressed family adds `--hub-btn-active-bg` (default `color-mix(in oklch, var(--hub-btn-accent) 70%, var(--hub-sys-color-ink, #212529))`), `--hub-btn-active-border` (default `transparent`) and `--hub-btn-active-color` (default `var(--hub-btn-accent-on)`). Each appearance re-points only the slots it needs, so a consumer can retune a single interaction colour with one CSS variable — no recompilation.
+- **`:active` (pressed) state** on every button appearance (`&:active:not([disabled]):not(.hub-btn-disabled)`), reading the new `--hub-btn-active-*` slots. Previously buttons had no pressed feedback.
+- **Element-form keyboard accessibility.** The `<hub-button>` element form (which cannot swap its host tag for a native `<button>`) now advertises `role="button"`, a focusable `tabindex` (`0`, or `-1` when inert — disabled or loading), `aria-disabled` while inert, and activates on Enter/Space (`preventDefault` on Space to avoid scrolling). The `[hubButton]` attribute form on a native `<button>`/`<a>` adds none of these bindings, so it stays free of redundant `role`/`tabindex`.
+
+### Changed
+
+- **`hub-btn-variant-rules` mixin** gained `$active-bg` / `$active-border` / `$active-color` parameters and now routes both the `:hover` and `:active` branches through the overridable `--hub-btn-hover-*` / `--hub-btn-active-*` slots. The `$hover-*` parameters now default to `null` (fall back to the host slot defaults). Existing visuals are unchanged.
+
 ## [22.7.0] - 2026-07-02
 
 ### Added
