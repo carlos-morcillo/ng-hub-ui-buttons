@@ -48,4 +48,18 @@ describe('HubSpeedDialComponent', () => {
 		component.toggle(); // close
 		expect(spy).toHaveBeenCalledTimes(1);
 	});
+
+	it('resolves a semantic color to its sys token on the trigger --hub-fab-accent', () => {
+		ref.setInput('color', 'primary');
+		fixture.detectChanges();
+		const trigger: HTMLElement = fixture.nativeElement.querySelector('.hub-fab');
+		expect(trigger.style.getPropertyValue('--hub-fab-accent')).toBe('var(--hub-sys-color-primary, primary)');
+	});
+
+	it('passes a literal color through unchanged on the trigger --hub-fab-accent', () => {
+		ref.setInput('color', '#ff0000');
+		fixture.detectChanges();
+		const trigger: HTMLElement = fixture.nativeElement.querySelector('.hub-fab');
+		expect(trigger.style.getPropertyValue('--hub-fab-accent')).toBe('#ff0000');
+	});
 });

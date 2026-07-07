@@ -1,16 +1,7 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import {
-	ChangeDetectionStrategy,
-	Component,
-	DestroyRef,
-	HostBinding,
-	PLATFORM_ID,
-	inject,
-	input,
-	model,
-	output
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, PLATFORM_ID, inject, input, model, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { resolveHubAccent } from 'ng-hub-ui-utils';
 import { fromEvent } from 'rxjs';
 import { filter } from 'rxjs/operators';
 import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/button.types';
@@ -26,7 +17,10 @@ import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/butto
 	templateUrl: './speed-dial.component.html',
 	styleUrl: './speed-dial.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	host: { class: 'hub-speed-dial' }
+	host: {
+		class: 'hub-speed-dial',
+		'[class]': '_hostClass'
+	}
 })
 export class HubSpeedDialComponent {
 	color = input<HubSemanticColor>('primary');
@@ -40,7 +34,6 @@ export class HubSpeedDialComponent {
 
 	private readonly _destroyRef = inject(DestroyRef);
 
-	@HostBinding('class')
 	protected get _hostClass(): string {
 		return [
 			`hub-speed-dial-${this.color()}`,
@@ -50,6 +43,20 @@ export class HubSpeedDialComponent {
 		]
 			.filter(Boolean)
 			.join(' ');
+	}
+
+	/**
+	 * The semantic accent painted on the inner `.hub-fab` trigger button through its
+	 * `--hub-fab-accent` slot. Accepts ANY colour: a bareword (a built-in semantic
+	 * name, a host-registered accent or a CSS named colour) resolves to its
+	 * `--hub-sys-color-<name>` token with the bareword as the raw fallback, so
+	 * unregistered names still paint; a literal (`#hex`, `rgb()`, `oklch()`,
+	 * `var(...)`) is passed through unchanged. Built-in `hub-fab-<color>` classes on
+	 * the trigger keep overriding the background, so this slot only paints custom /
+	 * literal colours.
+	 */
+	protected get _accent(): string | null {
+		return resolveHubAccent(this.color());
 	}
 
 	constructor() {

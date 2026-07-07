@@ -1,6 +1,7 @@
 <button
 	class="hub-fab"
 	[class]="'hub-fab-' + color() + ' hub-fab-' + size()"
+	[style.--hub-fab-accent]="_accent"
 	(click)="trigger() === 'click' && toggle()"
 	(mouseenter)="trigger() === 'hover' && open()"
 	(mouseleave)="trigger() === 'hover' && close()"

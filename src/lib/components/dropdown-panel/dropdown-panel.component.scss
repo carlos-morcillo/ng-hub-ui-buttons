@@ -20,6 +20,11 @@
 	padding-block: var(--hub-dropdown-panel-padding-y);
 	background: var(--hub-dropdown-panel-bg);
 	border: var(--hub-ref-border-width, 1px) solid var(--hub-dropdown-panel-border-color);
+	// Open-set accent on the top edge. Defaults to the neutral border colour, so an
+	// uncoloured panel is unchanged; the built-in `.hub-dropdown-panel-<type>` rules
+	// below win the cascade with their own thicker 3px accent. A custom or literal
+	// colour supplied through `[style.--hub-dropdown-panel-accent]` tints this edge.
+	border-top-color: var(--hub-dropdown-panel-accent, var(--hub-dropdown-panel-border-color));
 	border-radius: var(--hub-dropdown-panel-border-radius);
 	box-shadow: var(--hub-dropdown-panel-shadow);
 	z-index: var(--hub-dropdown-panel-zindex);

@@ -35,7 +35,10 @@
 	align-items: center;
 	justify-content: center;
 	font-size: 1.1rem;
-	background: var(--hub-sys-color-surface-default, #ffffff);
+	// Open-set accent slot with the neutral surface as fallback: `default` and the
+	// built-in `--#{type}` rules below win the cascade, so this only paints a custom
+	// or literal colour supplied through `[style.--hub-speed-dial-item-accent]`.
+	background: var(--hub-speed-dial-item-accent, var(--hub-sys-color-surface-default, #ffffff));
 	box-shadow: var(--hub-sys-shadow-md, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
 	transition: transform 0.15s ease;
 

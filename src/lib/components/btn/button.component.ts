@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, ElementRef, HostBinding, HostListener, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
+import { resolveHubAccent } from 'ng-hub-ui-utils';
 import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button.types';
 
 /**
@@ -37,7 +38,17 @@ import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button
 	templateUrl: './button.component.html',
 	styleUrl: './button.component.scss',
 	changeDetection: ChangeDetectionStrategy.OnPush,
-	host: { class: 'hub-btn' }
+	host: {
+		class: 'hub-btn',
+		'[class]': '_hostClass',
+		'[style.--hub-btn-accent]': '_accent',
+		'[attr.disabled]': '_disabledAttr',
+		'[attr.aria-busy]': '_ariaBusy',
+		'[attr.aria-disabled]': '_ariaDisabled',
+		'[attr.role]': '_role',
+		'[attr.tabindex]': '_tabindex',
+		'(keydown)': '_onKeydown($event)'
+	}
 })
 export class HubButtonComponent {
 	/**
@@ -78,8 +89,7 @@ export class HubButtonComponent {
 		return this.disabled() || this.loading();
 	}
 
-	/** Computed CSS classes applied to the host element via HostBinding. */
-	@HostBinding('class')
+	/** Computed CSS classes applied to the host element via the `[class]` host binding. */
 	protected get _hostClass(): string {
 		return [
 			`hub-btn-${this.variant()}`,
@@ -92,14 +102,26 @@ export class HubButtonComponent {
 			.join(' ');
 	}
 
+	/**
+	 * The single semantic accent consumed by the stylesheet (`--hub-btn-accent`),
+	 * from which every visual role (emphasis / subtle / on) is derived at runtime.
+	 *
+	 * Accepts ANY colour: a bareword (a built-in semantic name, a host-registered
+	 * accent or a CSS named colour) resolves to its `--hub-sys-color-<name>` token
+	 * with the bareword itself as the raw fallback, so unregistered names still
+	 * paint; a literal (`#hex`, `rgb()`, `oklch()`, `var(...)`) is passed through
+	 * unchanged. The built-in `hub-btn-<color>` appearance classes remain in place.
+	 */
+	protected get _accent(): string | null {
+		return resolveHubAccent(this.color());
+	}
+
 	/** Reflects the inert state (disabled or loading) as the native `disabled` attribute. */
-	@HostBinding('attr.disabled')
 	protected get _disabledAttr(): true | null {
 		return this._isInert ? true : null;
 	}
 
 	/** Announces the busy state to assistive tech while loading. */
-	@HostBinding('attr.aria-busy')
 	protected get _ariaBusy(): 'true' | null {
 		return this.loading() ? 'true' : null;
 	}
@@ -109,7 +131,6 @@ export class HubButtonComponent {
 	 * host tag does not natively expose `disabled`. Bound to nothing for the
 	 * attribute form (its native host already exposes the state).
 	 */
-	@HostBinding('attr.aria-disabled')
 	protected get _ariaDisabled(): 'true' | null {
 		return this._isElementForm && this._isInert ? 'true' : null;
 	}
@@ -118,7 +139,6 @@ export class HubButtonComponent {
 	 * Advertises `role="button"` for the element form only. The attribute form binds
 	 * nothing (its native host already exposes the correct role).
 	 */
-	@HostBinding('attr.role')
 	protected get _role(): 'button' | null {
 		return this._isElementForm ? 'button' : null;
 	}
@@ -127,7 +147,6 @@ export class HubButtonComponent {
 	 * Makes the element form keyboard-focusable (`0`), or removes it from the tab order
 	 * when inert — disabled or loading (`-1`). Bound to nothing for the attribute form.
 	 */
-	@HostBinding('attr.tabindex')
 	protected get _tabindex(): number | null {
 		if (!this._isElementForm) {
 			return null;
@@ -143,7 +162,6 @@ export class HubButtonComponent {
 	 * while inert (disabled or loading).
 	 * @param event The originating keyboard event.
 	 */
-	@HostListener('keydown', ['$event'])
 	protected _onKeydown(event: KeyboardEvent): void {
 		if (!this._isElementForm || this._isInert) {
 			return;

@@ -52,4 +52,16 @@ describe('HubFabComponent', () => {
 		fixture.detectChanges();
 		expect(el.classList).toContain('hub-fab-mini');
 	});
+
+	it('resolves a semantic color to its sys token on --hub-fab-accent', () => {
+		ref.setInput('color', 'primary');
+		fixture.detectChanges();
+		expect(el.style.getPropertyValue('--hub-fab-accent')).toBe('var(--hub-sys-color-primary, primary)');
+	});
+
+	it('passes a literal color through unchanged on --hub-fab-accent', () => {
+		ref.setInput('color', '#ff0000');
+		fixture.detectChanges();
+		expect(el.style.getPropertyValue('--hub-fab-accent')).toBe('#ff0000');
+	});
 });

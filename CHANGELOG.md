@@ -1,5 +1,16 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.9.0] - 2026-07-07
+
+### Added
+
+- **`hub-btn-theme(...)` mixin** — one-call token theming for `<hub-button>` / `[hubBtn]`: `accent` (drives the role family) plus `border-radius`, `padding-x/-y`, `font-size`. Null-defaulted and additive; the variant-registration mixins (`hub-btn-color-rules`, `hub-fab-color`, `hub-dropdown-*-color`) stay for registering new named accents. `@use 'ng-hub-ui-buttons/styles' as *;`.
+
+### Changed
+
+- **`<hub-button>` / fab / speed-dial / dropdown `[color]` accepts ANY colour.** On top of the built-in semantic accents, the input now also accepts a **registered custom accent** and a **literal colour** (`#ff0000`, `rgb(...)`, `oklch(...)`, a CSS named colour), resolved through the shared `resolveHubAccent` helper (imported from `ng-hub-ui-utils`): a bareword becomes `var(--hub-sys-color-<name>, <name>)`; a literal is used as-is. The single `--hub-<comp>-accent` slot derives the rest of the family, so built-in colours are unchanged.
+- **Internal — host bindings moved to the `host` metadata object.** `@HostBinding` / `@HostListener` decorators were replaced by the `host` object in the component/directive metadata (Angular style guide). No public API or behaviour change.
+
 ## [22.8.0] - 2026-07-05
 
 ### Added

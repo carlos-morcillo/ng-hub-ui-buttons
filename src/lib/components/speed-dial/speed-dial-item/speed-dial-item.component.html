@@ -4,6 +4,7 @@
 <button
 	class="hub-speed-dial-item__btn"
 	[class]="'hub-speed-dial-item__btn--' + color()"
+	[style.--hub-speed-dial-item-accent]="_accent"
 	[disabled]="disabled() || null"
 	(click)="itemClick.emit()"
 	type="button"

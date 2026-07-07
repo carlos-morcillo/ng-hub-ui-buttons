@@ -23,7 +23,10 @@
 	border: none;
 	background: transparent;
 	font-size: var(--hub-ref-font-size-sm, 0.875rem);
-	color: inherit;
+	// Open-set accent slot, inheriting by default. The built-in `--#{type}` rules
+	// below win the cascade, so this only paints a custom or literal colour supplied
+	// through `[style.--hub-dropdown-item-accent]` on the host.
+	color: var(--hub-dropdown-item-accent, inherit);
 	cursor: pointer;
 	text-align: start;
 	border-radius: var(--hub-dropdown-item-border-radius);

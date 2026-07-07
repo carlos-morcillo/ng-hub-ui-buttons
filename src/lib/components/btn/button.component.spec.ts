@@ -76,6 +76,18 @@ describe('HubButtonComponent', () => {
 		fixture.detectChanges();
 		expect(el.classList).toContain('hub-btn-brand');
 	});
+
+	it('resolves a semantic color to its sys token on --hub-btn-accent', () => {
+		ref.setInput('color', 'primary');
+		fixture.detectChanges();
+		expect(el.style.getPropertyValue('--hub-btn-accent')).toBe('var(--hub-sys-color-primary, primary)');
+	});
+
+	it('passes a literal color through unchanged on --hub-btn-accent', () => {
+		ref.setInput('color', '#ff0000');
+		fixture.detectChanges();
+		expect(el.style.getPropertyValue('--hub-btn-accent')).toBe('#ff0000');
+	});
 });
 
 @Component({

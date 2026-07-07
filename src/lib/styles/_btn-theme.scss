@@ -1,0 +1,49 @@
+// ─────────────────────────────────────────────────────────────────────────
+// hub-btn-theme — one-call token theming for `<hub-button>` / `[hubBtn]`
+// ─────────────────────────────────────────────────────────────────────────
+//
+// Override the key button design tokens in a single include. Every parameter is
+// OPTIONAL and defaults to `null`: only the parameters you pass are emitted, so the
+// rest keep the component defaults. Token-based and self-contained.
+//
+// `$accent` re-bases the shared accent slot (`--hub-btn-accent`), from which the
+// role family derives. Use the variant-registration mixins (`hub-btn-color-rules`,
+// `hub-fab-color`, `hub-dropdown-*-color`) to register a NEW named accent; use this
+// mixin to tune the shell (padding, radius, typography) on a selector.
+//
+// @example
+//
+//   @use 'ng-hub-ui-buttons/styles' as *;
+//
+//   .toolbar {
+//     @include hub-btn-theme($accent: var(--hub-sys-color-brand), $border-radius: 999px);
+//   }
+//
+// scss-docs-start hub-btn-theme
+@mixin hub-btn-theme(
+	// ── Colour ──
+	$accent: null,          // semantic accent slot (drives the derived role family)
+	// ── Shape ──
+	$border-radius: null,
+	// ── Density / typography ──
+	$padding-x: null,
+	$padding-y: null,
+	$font-size: null
+) {
+	@if $accent != null {
+		--hub-btn-accent: #{$accent};
+	}
+	@if $border-radius != null {
+		--hub-button-border-radius: #{$border-radius};
+	}
+	@if $padding-x != null {
+		--hub-button-padding-x: #{$padding-x};
+	}
+	@if $padding-y != null {
+		--hub-button-padding-y: #{$padding-y};
+	}
+	@if $font-size != null {
+		--hub-button-font-size: #{$font-size};
+	}
+}
+// scss-docs-end hub-btn-theme
