@@ -1,5 +1,11 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.9.1] - 2026-07-26
+
+### Fixed
+
+- Declared the real `ng-hub-ui-utils` peer range: `>=22.7.0`. The library imports `resolveHubAccent` (utils 22.7.0) and the overlay engine; the previous `>=1.0.0` floor resolved to a utils major that lacks those symbols, producing installs that compile but fail at runtime.
+
 ## [22.9.0] - 2026-07-07
 
 ### Added

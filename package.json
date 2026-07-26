@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-buttons",
-	"version": "22.9.0",
+	"version": "22.9.1",
 	"description": "Buttons, FAB, Speed Dial and Dropdown directive for Angular, part of the ng-hub-ui ecosystem",
 	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
 	"repository": {
@@ -25,7 +25,7 @@
 	"peerDependencies": {
 		"@angular/common": ">=21.0.0",
 		"@angular/core": ">=21.0.0",
-		"ng-hub-ui-utils": ">=1.0.0"
+		"ng-hub-ui-utils": ">=22.7.0"
 	},
 	"dependencies": {
 		"tslib": "^2.3.0"
