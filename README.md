@@ -10,11 +10,11 @@ Complete Angular 21+ button system — standard buttons, FAB, speed dial and ove
 
 ## Documentation and Live Examples
 
-This package is part of [Hub UI](https://hubui.dev/), a collection of Angular component libraries for standalone apps.
+This package is part of [Hub UI](https://hubui.dev/en/), a collection of Angular component libraries for standalone apps.
 
-- Docs: https://hubui.dev/buttons/overview/
-- Live examples: https://hubui.dev/buttons/examples/
-- Hub UI: https://hubui.dev/
+- Docs: https://hubui.dev/en/buttons/overview/
+- Live examples: https://hubui.dev/en/buttons/examples/
+- Hub UI: https://hubui.dev/en/
 
 ## Library Family `ng-hub-ui`
 

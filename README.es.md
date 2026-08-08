@@ -10,11 +10,11 @@ Sistema de botones completo para Angular 21+ — botones estándar, FAB, speed d
 
 ## Documentación y ejemplos
 
-Este paquete forma parte de [Hub UI](https://hubui.dev/), una colección de librerías de componentes Angular para aplicaciones standalone.
+Este paquete forma parte de [Hub UI](https://hubui.dev/en/), una colección de librerías de componentes Angular para aplicaciones standalone.
 
-- Docs: https://hubui.dev/buttons/overview/
-- Ejemplos: https://hubui.dev/buttons/examples/
-- Hub UI: https://hubui.dev/
+- Docs: https://hubui.dev/en/buttons/overview/
+- Ejemplos: https://hubui.dev/en/buttons/examples/
+- Hub UI: https://hubui.dev/en/
 
 ## Familia de librerías `ng-hub-ui`
 
