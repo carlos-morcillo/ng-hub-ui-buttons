@@ -1,4 +1,11 @@
-import type { HubSemanticColor, HubBtnVariant, HubBtnSize, HubFabSize, HubFabPosition, HubDropdownPlacement } from './button.types';
+import type {
+	HubSemanticColor,
+	HubBtnVariant,
+	HubBtnSize,
+	HubFabSize,
+	HubFabPosition,
+	HubDropdownPlacement
+} from './button.types';
 
 describe('button.types', () => {
 	it('HubSemanticColor covers all six semantic values', () => {
@@ -37,7 +44,16 @@ describe('button.types', () => {
 	});
 
 	it('HubDropdownPlacement covers all eight placements', () => {
-		const placements: HubDropdownPlacement[] = ['top-start', 'top', 'top-end', 'start', 'end', 'bottom-start', 'bottom', 'bottom-end'];
+		const placements: HubDropdownPlacement[] = [
+			'top-start',
+			'top',
+			'top-end',
+			'start',
+			'end',
+			'bottom-start',
+			'bottom',
+			'bottom-end'
+		];
 		expect(placements).toHaveLength(8);
 	});
 });

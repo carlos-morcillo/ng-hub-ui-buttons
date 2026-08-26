@@ -8,6 +8,7 @@
 	[disabled]="disabled() || null"
 	(click)="itemClick.emit()"
 	type="button"
-	[attr.aria-label]="label() || icon()">
+	[attr.aria-label]="label() || icon()"
+>
 	<i [class]="icon()" aria-hidden="true"></i>
 </button>

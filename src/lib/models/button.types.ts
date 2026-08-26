@@ -5,15 +5,7 @@
  * ships and the button accent loop already emits.
  */
 export type HubSemanticBuiltinColor =
-	| 'primary'
-	| 'secondary'
-	| 'success'
-	| 'danger'
-	| 'warning'
-	| 'info'
-	| 'neutral'
-	| 'light'
-	| 'dark';
+	'primary' | 'secondary' | 'success' | 'danger' | 'warning' | 'info' | 'neutral' | 'light' | 'dark';
 
 /**
  * Semantic color token shared across all button-library components
@@ -56,12 +48,4 @@ export type HubFabPosition =
  * Placement slot for the dropdown overlay, relative to the trigger element.
  * OverlayPosition tries positions in order until one fits the viewport.
  */
-export type HubDropdownPlacement =
-	| 'top-start'
-	| 'top'
-	| 'top-end'
-	| 'start'
-	| 'end'
-	| 'bottom-start'
-	| 'bottom'
-	| 'bottom-end';
+export type HubDropdownPlacement = 'top-start' | 'top' | 'top-end' | 'start' | 'end' | 'bottom-start' | 'bottom' | 'bottom-end';

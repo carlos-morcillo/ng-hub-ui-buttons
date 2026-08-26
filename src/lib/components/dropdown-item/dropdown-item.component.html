@@ -1,8 +1,4 @@
-<button
-	class="hub-dropdown-item__inner"
-	type="button"
-	[disabled]="disabled() || null"
-	(click)="_handleClick()">
+<button class="hub-dropdown-item__inner" type="button" [disabled]="disabled() || null" (click)="_handleClick()">
 	@if (icon()) {
 		<i [class]="icon()" aria-hidden="true"></i>
 	}

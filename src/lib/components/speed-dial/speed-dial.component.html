@@ -7,7 +7,8 @@
 	(mouseleave)="trigger() === 'hover' && close()"
 	type="button"
 	[attr.aria-expanded]="isOpen()"
-	aria-haspopup="true">
+	aria-haspopup="true"
+>
 	<ng-content select="[hubTrigger]"></ng-content>
 </button>
 

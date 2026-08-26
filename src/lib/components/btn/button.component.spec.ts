@@ -47,7 +47,6 @@ describe('HubButtonComponent', () => {
 		expect(el.classList).toContain('hub-btn-outline');
 	});
 
-
 	it('should apply hub-btn-loading when loading=true', () => {
 		ref.setInput('loading', true);
 		fixture.detectChanges();

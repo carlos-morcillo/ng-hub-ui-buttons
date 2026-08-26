@@ -22,7 +22,8 @@
 // scss-docs-start hub-btn-theme
 @mixin hub-btn-theme(
 	// ── Colour ──
-	$accent: null,          // semantic accent slot (drives the derived role family)
+	$accent: null,
+	// semantic accent slot (drives the derived role family)
 	// ── Shape ──
 	$border-radius: null,
 	// ── Density / typography ──
