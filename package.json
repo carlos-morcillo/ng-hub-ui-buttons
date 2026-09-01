@@ -1,6 +1,6 @@
 {
 	"name": "ng-hub-ui-buttons",
-	"version": "22.9.3",
+	"version": "22.9.4",
 	"license": "MIT",
 	"description": "Buttons, FAB, Speed Dial and Dropdown directive for Angular, part of the ng-hub-ui ecosystem",
 	"author": "Carlos Morcillo <carlos.morcillo@me.com> (https://www.carlosmorcillo.com)",
@@ -12,7 +12,7 @@
 		"url": "https://github.com/carlos-morcillo/ng-hub-ui-buttons/issues",
 		"email": "carlos.morcillo@me.com"
 	},
-	"homepage": "https://hubui.dev/",
+	"homepage": "https://hubui.dev/en/buttons/overview/",
 	"keywords": [
 		"angular",
 		"button",
