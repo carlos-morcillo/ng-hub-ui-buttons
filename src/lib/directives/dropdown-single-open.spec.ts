@@ -71,6 +71,34 @@ describe('only one dropdown open at a time', () => {
 		expect(menus[0].isOpen()).toBe(false);
 	});
 
+	/**
+	 * A menu destroyed while open must not stay recorded as the open one.
+	 *
+	 * A table row is the ordinary way this happens: the row is redrawn or the page
+	 * navigates away while its menu is up. Left recorded, the next dropdown to open
+	 * anywhere would call `close()` on a destroyed instance — which emits `closed` on an
+	 * `OutputRef` nobody owns any more, and Angular says so with NG0953.
+	 */
+	it('forgets a menu destroyed while it was open', () => {
+		menus[0].open();
+
+		// Watched on the instance rather than on its `closed` output: Angular refuses to
+		// deliver an emission from a destroyed `OutputRef` — that refusal is the NG0953
+		// itself — so a subscriber would see nothing either way. What has to be true is
+		// that nobody reaches into the destroyed directive at all.
+		const reachedInto = vi.spyOn(menus[0], 'close');
+
+		fixture.destroy();
+
+		const otra = TestBed.createComponent(ThreeMenus);
+		otra.detectChanges();
+		otra.componentInstance.dropdowns()[0].open();
+
+		expect(reachedInto).not.toHaveBeenCalled();
+
+		otra.destroy();
+	});
+
 	it('emits closed on the one it displaces', () => {
 		let closedCount = 0;
 		menus[0].closed.subscribe(() => closedCount++);

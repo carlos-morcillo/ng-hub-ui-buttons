@@ -82,6 +82,21 @@ export class HubDropdownDirective {
 				)
 				.subscribe(() => this.close());
 		}
+
+		// Torn down silently, not closed. `close()` emits `closed`, and a component that
+		// is already gone has nobody to tell — Angular reports that as NG0953. Two things
+		// have to go: the overlay, which lives on the body and would otherwise outlive the
+		// view that owns it, and this directive's place as the one open dropdown, which
+		// would leave a destroyed instance to be closed by whoever opens the next one.
+		this._destroyRef.onDestroy(() => {
+			if (openDropdown === this) {
+				openDropdown = null;
+			}
+
+			this._overlayRef?.detach();
+			this._overlayRef?.dispose();
+			this._overlayRef = null;
+		});
 	}
 
 	/** Open the dropdown and mount the overlay, closing whichever one was open. */

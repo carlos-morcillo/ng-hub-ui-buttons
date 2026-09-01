@@ -1,5 +1,20 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.10.1] - 2026-09-01
+
+### Fixed
+
+- **A dropdown destroyed while open no longer leaves anything behind.**
+
+  Two things outlived the view that owned them. Its overlay stayed attached to the body,
+  and the directive stayed recorded as the one open dropdown — so the next dropdown to
+  open anywhere called `close()` on a destroyed instance, which emits `closed` on an
+  `OutputRef` nobody owns any more. The browser reports that as **NG0953**, and it showed
+  up in an ordinary table: open a row menu, navigate away, open another.
+
+  Both are now torn down on destroy, and silently: calling `close()` there would emit the
+  very event that has nobody left to receive it.
+
 ## [22.10.0] - 2026-09-01
 
 ### Added
