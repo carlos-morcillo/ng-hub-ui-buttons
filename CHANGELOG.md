@@ -1,5 +1,41 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.10.0] - 2026-09-01
+
+### Added
+
+- **`hubActionsAdapter`**, so a host library can have its row actions drawn with this
+  library's button and dropdown without either package depending on the other.
+
+  It is the arrangement `hubFormControlAdapter` already uses for a table's inputs: the
+  host describes what a row offers in neutral terms — icons, labels, `disabled`, the
+  actions inside a menu — and this maps the description onto the real components. The
+  types are declared here and mirror the host's structurally, so nothing is imported
+  across the boundary and the application is the only place that knows both exist.
+
+  Register it where the host expects it; for `ng-hub-ui-paginable`:
+
+  ```ts
+  providers: [provideHubPaginableActions(hubActionsAdapter)];
+  ```
+
+- **`hub-actions-cell`**, the component that adapter creates. Public because creating a
+  component is the honest way to assemble `hubDropdown` — it needs a host element and an
+  `ng-template`, which is natural in a template and awkward imperatively.
+
+### Fixed
+
+- **Only one dropdown is open at a time, however it was opened.**
+
+  Closing on click-outside already made a second one *usually* replace the first, since
+  opening it is itself a click outside the first. Usually is not a guarantee: a dropdown
+  opened from code produces no such click — a keyboard shortcut, a menu restored after a
+  re-render, a table row opening its own — and both panels stayed up.
+
+- **A click on a row action no longer reaches whatever surrounds it.** Drawn inside a
+  clickable row — a table row that opens a detail page — pressing an action navigated
+  away, and the action's own effect was lost with the screen it happened on.
+
 ## [22.9.4] - 2026-09-01
 
 ### Changed

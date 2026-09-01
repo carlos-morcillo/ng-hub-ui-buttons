@@ -30,3 +30,8 @@ export * from './lib/components/dropdown-header/dropdown-header.component';
 
 // Directives
 export * from './lib/directives/dropdown.directive';
+
+// Cross-library integrations
+export * from './lib/integrations/actions.types';
+export * from './lib/integrations/actions-cell.component';
+export * from './lib/integrations/actions-adapter';

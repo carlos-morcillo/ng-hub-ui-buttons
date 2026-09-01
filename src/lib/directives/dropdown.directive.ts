@@ -20,9 +20,24 @@ import type { OverlayRef, ConnectionPosition } from 'ng-hub-ui-utils';
 import { HubDropdownPlacement } from '../models/button.types';
 
 /**
+ * The one dropdown currently open, anywhere on the page.
+ *
+ * Closing on click-outside already made a second one *usually* replace the first, since
+ * opening it is itself a click outside the first. Usually is not a guarantee: a dropdown
+ * opened from code — a keyboard shortcut, a menu restored after a re-render, a table row
+ * that opens its own — produces no such click, and two panels stay up at once. Held in a
+ * module variable rather than a service because the rule is about the page, not about
+ * anything injectable, and a service would make every consumer provide one to get it.
+ */
+let openDropdown: HubDropdownDirective | null = null;
+
+/**
  * Turns any host element into a dropdown trigger.
  * Renders an ng-template in a body-level overlay managed by OverlayService (no CDK).
  * When closeOnSelect is true, any click inside the panel closes the overlay automatically.
+ *
+ * Only one dropdown is open at a time: opening one closes whichever was already open,
+ * however it was opened.
  */
 @Directive({
 	selector: '[hubDropdown]',
@@ -69,9 +84,12 @@ export class HubDropdownDirective {
 		}
 	}
 
-	/** Open the dropdown and mount the overlay. */
+	/** Open the dropdown and mount the overlay, closing whichever one was open. */
 	open(): void {
 		if (this.disabled() || this.isOpen()) return;
+
+		openDropdown?.close();
+		openDropdown = this;
 
 		const positionStrategy = this._overlay.position().flexibleConnectedTo(this._el).withPositions(this._buildPositions());
 
@@ -113,6 +131,11 @@ export class HubDropdownDirective {
 	/** Close the dropdown and destroy the overlay. */
 	close(): void {
 		if (!this.isOpen()) return;
+		if (openDropdown === this) {
+			// Cleared before the overlay goes, so a listener that closes on the way out
+			// cannot find this one still recorded as the open one.
+			openDropdown = null;
+		}
 		this._overlayRef?.detach();
 		this._overlayRef?.dispose();
 		this._overlayRef = null;

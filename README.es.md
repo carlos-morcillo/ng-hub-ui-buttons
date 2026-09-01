@@ -56,6 +56,7 @@ Esta librería forma parte del ecosistema **ng-hub-ui**:
 - **FAB con nueve posiciones** — posicionamiento fijo en cualquier esquina, centro de borde o centro de pantalla con propiedades lógicas CSS (compatible con RTL).
 - **Speed Dial** — menú FAB expandible con modelo bidireccional `isOpen`, expansión direccional y cierre con Escape.
 - **Dropdown overlay** — adjunta cualquier `<ng-template>` a cualquier trigger; ocho opciones de placement, trigger por click o hover, cierre al hacer clic fuera o al hacer scroll.
+- **Acciones de fila entre bibliotecas** — `hubActionsAdapter` dibuja los botones y menús de fila de otra biblioteca con estos componentes, sin dependencia en ninguna dirección.
 - **Sistema de tokens SCSS extensible** — defaults con `:where()` (especificidad cero) para que cualquier regla del consumidor tenga prioridad. API de mixins públicos para registrar colores semánticos personalizados.
 
 ---
@@ -209,7 +210,7 @@ Output: `itemClick`.
 | `panelClass` | `string` | `''` | Clase CSS adicional en el panel overlay |
 | `isOpen` | `model(false)` | — | Estado bidireccional abierto/cerrado |
 
-Outputs: `opened`, `closed`. Métodos: `open()`, `close()`, `toggle()`. Se cierra con Escape, clic fuera y scroll.
+Outputs: `opened`, `closed`. Métodos: `open()`, `close()`, `toggle()`. Se cierra con Escape, clic fuera y scroll. Solo hay un desplegable abierto a la vez: abrir cualquiera cierra el que estuviera abierto, se haya abierto como se haya abierto.
 
 ### `HubDropdownPanelComponent` — `<hub-dropdown-panel>`
 
@@ -233,6 +234,33 @@ Separador horizontal con `role="separator"`.
 ### `HubDropdownHeaderComponent` — `<hub-dropdown-header>`
 
 Etiqueta de grupo en mayúsculas dentro de un panel dropdown.
+
+### `hubActionsAdapter` — acciones de fila entre bibliotecas
+
+Permite que una biblioteca anfitriona dibuje sus acciones de fila con el botón y el desplegable
+de esta, **sin que ninguna de las dos dependa de la otra**. Es la misma disposición que
+`hubFormControlAdapter` usa para los campos de una tabla: la anfitriona describe lo que ofrece
+una fila en términos neutros —iconos, etiquetas, `disabled`, las acciones dentro de un menú— y
+esto traduce la descripción a los componentes reales. Los tipos se declaran aquí y reflejan
+estructuralmente los de la anfitriona, así que no se importa nada a través de la frontera y la
+aplicación es el único sitio que sabe que ambas existen.
+
+```ts
+import { provideHubPaginableActions } from 'ng-hub-ui-paginable';
+import { hubActionsAdapter } from 'ng-hub-ui-buttons';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideHubPaginableActions(hubActionsAdapter)]
+};
+```
+
+### `HubActionsCellComponent` — `<hub-actions-cell>`
+
+El componente que crea ese adaptador, a partir de un único `config: HubActionsCellConfig`
+obligatorio. Es público porque crear un componente es la forma honesta de ensamblar
+`hubDropdown`: necesita un elemento anfitrión y un `ng-template`, lo cual es natural en una
+plantilla e incómodo por código. El clic sobre una de sus acciones se detiene ahí, así que una
+acción dibujada dentro de una fila pulsable no dispara además la fila.
 
 ---
 

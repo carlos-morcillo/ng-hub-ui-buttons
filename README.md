@@ -56,6 +56,7 @@ This library is part of the **ng-hub-ui** ecosystem:
 - **FAB with nine positions** — fixed-viewport placement at any corner, edge-center or screen-center via CSS logical properties (RTL-ready).
 - **Speed Dial** — expandable FAB menu with `isOpen` two-way model, directional expansion and Escape close.
 - **Overlay Dropdown** — attaches any `<ng-template>` to any trigger; eight placement options, click or hover trigger, backdrop and scroll close, no CDK dependency.
+- **Cross-library row actions** — `hubActionsAdapter` draws another library's row buttons and menus with these components, with no dependency in either direction.
 - **Extensible SCSS token system** — `:where()` zero-specificity defaults mean any consumer rule wins without `!important`. Public mixin API lets you register custom semantic colors.
 
 ---
@@ -209,7 +210,7 @@ Output: `itemClick`.
 | `panelClass` | `string` | `''` | Extra CSS class added to the overlay panel |
 | `isOpen` | `model(false)` | — | Two-way open state |
 
-Outputs: `opened`, `closed`. Methods: `open()`, `close()`, `toggle()`. Closes on Escape, backdrop click and scroll.
+Outputs: `opened`, `closed`. Methods: `open()`, `close()`, `toggle()`. Closes on Escape, backdrop click and scroll. Only one dropdown is open at a time: opening any closes whichever was already open, however it was opened.
 
 ### `HubDropdownPanelComponent` — `<hub-dropdown-panel>`
 
@@ -233,6 +234,32 @@ Horizontal separator with `role="separator"`.
 ### `HubDropdownHeaderComponent` — `<hub-dropdown-header>`
 
 Uppercase group label inside a dropdown panel.
+
+### `hubActionsAdapter` — cross-library row actions
+
+Lets a host library have its row actions drawn with this library's button and dropdown
+**without either package depending on the other**. The same arrangement `hubFormControlAdapter`
+uses for a table's inputs: the host describes what a row offers in neutral terms — icons,
+labels, `disabled`, the actions inside a menu — and this maps the description onto the real
+components. The types are declared here and mirror the host's structurally, so nothing is
+imported across the boundary and the application is the only place that knows both exist.
+
+```ts
+import { provideHubPaginableActions } from 'ng-hub-ui-paginable';
+import { hubActionsAdapter } from 'ng-hub-ui-buttons';
+
+export const appConfig: ApplicationConfig = {
+  providers: [provideHubPaginableActions(hubActionsAdapter)]
+};
+```
+
+### `HubActionsCellComponent` — `<hub-actions-cell>`
+
+The component that adapter creates, from a single required `config: HubActionsCellConfig`.
+Public because creating a component is the honest way to assemble `hubDropdown`: it needs a
+host element and an `ng-template`, which is natural in a template and awkward imperatively.
+A click on one of its actions is stopped there, so an action drawn inside a clickable row does
+not also trigger the row.
 
 ---
 
