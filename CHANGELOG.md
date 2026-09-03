@@ -1,5 +1,16 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.11.0] - 2026-09-03
+
+### Fixed
+
+- **`<button hubButton disabled>` compiles.** `disabled` and `loading` were declared as
+  `input(false)` with no transform, so the bare HTML spelling of a boolean attribute — which
+  passes the empty string — failed with `TS2322: Type 'string' is not assignable to type
+  'boolean'`. It failed on exactly the usage `disabled`'s own documentation promises to
+  mirror. Both now use `booleanAttribute`, so `disabled`, `disabled=""`, `[disabled]="true"`
+  and `loading` all work. Additive: every binding that compiled before still compiles.
+
 ## [22.10.1] - 2026-09-01
 
 ### Fixed

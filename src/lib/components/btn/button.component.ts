@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, ElementRef, inject, input } from '@angular/core';
 import { resolveHubAccent } from 'ng-hub-ui-utils';
 import { HubBtnSize, HubBtnVariant, HubSemanticColor } from '../../models/button.types';
 
@@ -74,10 +74,16 @@ export class HubButtonComponent {
 	 * keyboard, and (like {@link disabled}) reflects the native `disabled` attribute
 	 * so an in-flight submit button cannot be triggered twice.
 	 */
-	loading = input(false);
+	loading = input(false, { transform: booleanAttribute });
 
-	/** Mirrors the native disabled attribute on the host element. */
-	disabled = input(false);
+	/**
+	 * Mirrors the native disabled attribute on the host element.
+	 *
+	 * Transformed, so the bare HTML form works: `<button hubButton disabled>` passes the
+	 * empty string an attribute without a value carries, which an untransformed
+	 * `input(false)` rejects at compile time — on the very spelling the name promises.
+	 */
+	disabled = input(false, { transform: booleanAttribute });
 
 	/**
 	 * True while the button must not respond to interaction — either explicitly
