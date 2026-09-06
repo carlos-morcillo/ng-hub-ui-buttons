@@ -55,7 +55,7 @@ This library is part of the **ng-hub-ui** ecosystem:
 - **Four sizes** — `sm`, `md`, `lg`, `xl` with proportional padding and font scaling.
 - **FAB with nine positions** — fixed-viewport placement at any corner, edge-center or screen-center via CSS logical properties (RTL-ready).
 - **Speed Dial** — expandable FAB menu with `isOpen` two-way model, directional expansion and Escape close.
-- **Overlay Dropdown** — attaches any `<ng-template>` to any trigger; eight placement options, click or hover trigger, backdrop and scroll close, no CDK dependency.
+- **Overlay Dropdown** — attaches any `<ng-template>` to any trigger; eight placement options, click or hover trigger, click-outside and scroll close, no CDK dependency.
 - **Cross-library row actions** — `hubActionsAdapter` draws another library's row buttons and menus with these components, with no dependency in either direction.
 - **Extensible SCSS token system** — `:where()` zero-specificity defaults mean any consumer rule wins without `!important`. Public mixin API lets you register custom semantic colors.
 
@@ -160,10 +160,22 @@ hub-button, [hubButton] {
 | `position` | `top-start \| top-center \| top-end \| middle-start \| center \| middle-end \| bottom-start \| bottom-center \| bottom-end` | `bottom-end` | Fixed viewport position |
 | `size` | `mini \| standard \| large` | `standard` | Button size |
 | `color` | semantic | `primary` | Colour variant |
-| `collapseOnScroll` | `boolean` | `false` | Hides extended label on scroll, expands on stop |
+| `extended` | `boolean` | `false` | Renders the pill variant with a projected label beside the icon |
+| `collapseOnScroll` | `boolean` | `false` | Collapses an extended FAB to icon-only while the page is scrolled past 50px, and expands it again near the top |
 | `disabled` | `boolean` | `false` | Disables the button |
 
 Output: `fabClick`.
+
+Content slots: `[slot=icon]` always renders, `[slot=label]` only in the extended form. A FAB that is not extended projects its default content instead of the label.
+
+```html
+<hub-fab extended aria-label="New document">
+    <i slot="icon" class="fa-solid fa-plus"></i>
+    <span slot="label">New document</span>
+</hub-fab>
+```
+
+> The host element *is* the control, so it advertises `role="button"`, a focusable `tabindex` and Enter/Space activation. Don't nest it inside another interactive element, and give it an `aria-label` when it only holds an icon.
 
 ### `HubSpeedDialComponent` — `<hub-speed-dial>`
 
@@ -171,10 +183,12 @@ Output: `fabClick`.
 |---|---|---|---|
 | `isOpen` | `model(false)` | `false` | Two-way binding for open/closed state |
 | `position` | same as FAB | `bottom-end` | Fixed viewport position |
+| `size` | `mini \| standard \| large` | `standard` | Trigger button size |
 | `color` | semantic | `primary` | Trigger button colour |
 | `direction` | `up \| down \| left \| right` | `up` | Direction in which action items expand |
+| `trigger` | `click \| hover` | `click` | Interaction that opens the dial |
 
-Methods: `open()`, `close()`, `toggle()`. Closes on Escape.
+Outputs: `opened`, `closed`, plus `isOpenChange` from the two-way `isOpen` model. Methods: `open()`, `close()`, `toggle()`. Closes on Escape.
 
 Use `hubTrigger` on the element projected as the trigger button:
 
@@ -192,7 +206,7 @@ Use `hubTrigger` on the element projected as the trigger button:
 |-------|------|---------|-------------|
 | `icon` | `string` | — | CSS class(es) applied to an `<i>` element (e.g. `fa-solid fa-pen`) |
 | `label` | `string` | — | Tooltip label shown beside the item |
-| `color` | semantic | `primary` | Item button colour |
+| `color` | semantic \| `default` | `default` | Item button colour; `default` keeps the neutral appearance |
 | `disabled` | `boolean` | `false` | Disables the item |
 
 Output: `itemClick`.
@@ -210,7 +224,7 @@ Output: `itemClick`.
 | `panelClass` | `string` | `''` | Extra CSS class added to the overlay panel |
 | `isOpen` | `model(false)` | — | Two-way open state |
 
-Outputs: `opened`, `closed`. Methods: `open()`, `close()`, `toggle()`. Closes on Escape, backdrop click and scroll. Only one dropdown is open at a time: opening any closes whichever was already open, however it was opened.
+Outputs: `opened`, `closed`. Methods: `open()`, `close()`, `toggle()`. Closes on Escape, a click outside and scroll. Only one dropdown is open at a time: opening any closes whichever was already open, however it was opened.
 
 ### `HubDropdownPanelComponent` — `<hub-dropdown-panel>`
 
@@ -269,18 +283,18 @@ All visual properties are CSS custom properties scoped with `:where()` (zero spe
 
 ```css
 /* Button */
---hub-button-padding-x:         0.875rem;
---hub-button-padding-y:         0.4375rem;
+--hub-button-padding-x:         var(--hub-ref-space-3, 1rem);
+--hub-button-padding-y:         var(--hub-ref-space-2, 0.5rem);
 --hub-button-border-radius:     var(--hub-sys-radius-md, 0.375rem);
 --hub-button-border-width:      1.5px;
---hub-button-font-size:         1rem;
---hub-button-font-weight:       500;
---hub-button-gap:               0.375rem;
---hub-button-transition:        all 0.15s ease;
+--hub-button-font-size:         var(--hub-ref-font-size-base, 1rem);
+--hub-button-font-weight:       var(--hub-ref-font-weight-medium, 500);
+--hub-button-gap:               var(--hub-ref-space-2, 0.5rem);
+--hub-button-transition:        var(--hub-sys-transition-fast, all 0.15s ease-in-out);
 --hub-button-spinner-size:      0.875em;
 --hub-button-spinner-duration:  0.7s;
 --hub-button-spinner:           url("data:image/svg+xml,…"); /* the loading glyph — swap for any SVG */
---hub-button-disabled-opacity:  0.55;
+--hub-button-disabled-opacity:  var(--hub-sys-opacity-disabled, 0.65);
 
 /* Button interaction slots (overridable hover / pressed families) */
 --hub-btn-hover-bg:       var(--hub-btn-accent-subtle);
@@ -295,15 +309,18 @@ All visual properties are CSS custom properties scoped with `:where()` (zero spe
 --hub-fab-size-standard:      3.5rem;
 --hub-fab-size-large:         4.5rem;
 --hub-fab-border-radius:      50%;
---hub-fab-shadow:             var(--hub-sys-shadow-md);
---hub-fab-shadow-hover:       var(--hub-sys-shadow-lg);
---hub-fab-offset:             1rem;
---hub-fab-zindex:            1030;
+--hub-fab-shadow:             var(--hub-sys-shadow-md, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+--hub-fab-shadow-hover:       var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
+--hub-fab-offset:             var(--hub-ref-space-3, 1rem);
+--hub-fab-zindex:             var(--hub-sys-zindex-fixed, 1030);
 --hub-fab-transition:         box-shadow 0.2s ease, transform 0.15s ease;
+--hub-fab-extended-height:    3.5rem;
+--hub-fab-extended-radius:    1.75rem;
+--hub-fab-extended-padding-x: 1.25rem;
 
 /* Speed Dial */
 --hub-speed-dial-gap:         0.625rem;
---hub-speed-dial-zindex:     1030;
+--hub-speed-dial-zindex:      var(--hub-sys-zindex-fixed, 1030);
 --hub-speed-dial-animation:   0.2s ease;
 
 /* Dropdown panel */
@@ -402,6 +419,7 @@ hub-button, [hubButton] {
 |---|---|---|
 | `hub-btn-variant-rules($bg, $color, $border, $hover-*, $active-*, …)` | inside a `hub-button, [hubButton]` variant selector | Generic primitive — every appearance property as a **named** param (no positional `$type`) |
 | `hub-btn-color-rules($type)` | global `hub-button, [hubButton]` block | Registers one custom accent (`--hub-btn-accent` → `--hub-sys-color-$type`); all five appearances derive from it |
+| `hub-btn-theme($accent, $border-radius, $padding-x, $padding-y, $font-size)` | any selector holding buttons | One-call token theming — every parameter optional, only the ones you pass are emitted |
 | `hub-fab-color($type)` | root | Global `.hub-fab-{type}` color rule |
 | `hub-dropdown-panel-color($type)` | root | Global color rule for `hub-dropdown-panel` |
 | `hub-dropdown-panel-color-rules($type)` | inside `hub-dropdown-panel` selector | CSS properties only — bring your own selector |

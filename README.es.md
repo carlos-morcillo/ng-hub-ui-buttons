@@ -160,10 +160,22 @@ hub-button, [hubButton] {
 | `position` | `top-start \| top-center \| top-end \| middle-start \| center \| middle-end \| bottom-start \| bottom-center \| bottom-end` | `bottom-end` | Posición fija en el viewport |
 | `size` | `mini \| standard \| large` | `standard` | Tamaño del botón |
 | `color` | semántico | `primary` | Color |
-| `collapseOnScroll` | `boolean` | `false` | Oculta la etiqueta extendida al hacer scroll |
+| `extended` | `boolean` | `false` | Renderiza la variante píldora con una etiqueta proyectada junto al icono |
+| `collapseOnScroll` | `boolean` | `false` | Colapsa un FAB extendido a solo icono mientras la página está desplazada más de 50px, y lo vuelve a expandir cerca del inicio |
 | `disabled` | `boolean` | `false` | Desactiva el botón |
 
 Output: `fabClick`.
+
+Slots de contenido: `[slot=icon]` se renderiza siempre; `[slot=label]`, solo en la forma extendida. Un FAB no extendido proyecta su contenido por defecto en lugar de la etiqueta.
+
+```html
+<hub-fab extended aria-label="Nuevo documento">
+    <i slot="icon" class="fa-solid fa-plus"></i>
+    <span slot="label">Nuevo documento</span>
+</hub-fab>
+```
+
+> El elemento anfitrión *es* el control, así que se anuncia con `role="button"`, un `tabindex` enfocable y activación con Enter/Espacio. No lo anides dentro de otro elemento interactivo y dale un `aria-label` cuando solo contenga un icono.
 
 ### `HubSpeedDialComponent` — `<hub-speed-dial>`
 
@@ -171,10 +183,12 @@ Output: `fabClick`.
 |---|---|---|---|
 | `isOpen` | `model(false)` | `false` | Binding bidireccional del estado abierto/cerrado |
 | `position` | igual que FAB | `bottom-end` | Posición fija en el viewport |
+| `size` | `mini \| standard \| large` | `standard` | Tamaño del botón trigger |
 | `color` | semántico | `primary` | Color del botón trigger |
 | `direction` | `up \| down \| left \| right` | `up` | Dirección en que se expanden los items |
+| `trigger` | `click \| hover` | `click` | Interacción que abre el speed dial |
 
-Métodos: `open()`, `close()`, `toggle()`. Se cierra con Escape.
+Outputs: `opened`, `closed`, más `isOpenChange` del modelo bidireccional `isOpen`. Métodos: `open()`, `close()`, `toggle()`. Se cierra con Escape.
 
 Usa `hubTrigger` en el elemento proyectado como botón trigger:
 
@@ -192,7 +206,7 @@ Usa `hubTrigger` en el elemento proyectado como botón trigger:
 |-------|------|-------------|-------------|
 | `icon` | `string` | — | Clase(s) CSS aplicadas a un elemento `<i>` (p. ej. `fa-solid fa-pen`) |
 | `label` | `string` | — | Etiqueta tooltip junto al item |
-| `color` | semántico | `primary` | Color del botón |
+| `color` | semántico \| `default` | `default` | Color del botón; `default` mantiene la apariencia neutra |
 | `disabled` | `boolean` | `false` | Desactiva el item |
 
 Output: `itemClick`.
@@ -270,18 +284,18 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 
 ```css
 /* Botón */
---hub-button-padding-x:         0.875rem;
---hub-button-padding-y:         0.4375rem;
+--hub-button-padding-x:         var(--hub-ref-space-3, 1rem);
+--hub-button-padding-y:         var(--hub-ref-space-2, 0.5rem);
 --hub-button-border-radius:     var(--hub-sys-radius-md, 0.375rem);
 --hub-button-border-width:      1.5px;
---hub-button-font-size:         1rem;
---hub-button-font-weight:       500;
---hub-button-gap:               0.375rem;
---hub-button-transition:        all 0.15s ease;
+--hub-button-font-size:         var(--hub-ref-font-size-base, 1rem);
+--hub-button-font-weight:       var(--hub-ref-font-weight-medium, 500);
+--hub-button-gap:               var(--hub-ref-space-2, 0.5rem);
+--hub-button-transition:        var(--hub-sys-transition-fast, all 0.15s ease-in-out);
 --hub-button-spinner-size:      0.875em;
 --hub-button-spinner-duration:  0.7s;
 --hub-button-spinner:           url("data:image/svg+xml,…"); /* el glifo de carga — cámbialo por cualquier SVG */
---hub-button-disabled-opacity:  0.55;
+--hub-button-disabled-opacity:  var(--hub-sys-opacity-disabled, 0.65);
 
 /* Slots de interacción del botón (familias hover / pressed reconfigurables) */
 --hub-btn-hover-bg:       var(--hub-btn-accent-subtle);
@@ -296,15 +310,18 @@ Todas las propiedades visuales son CSS custom properties con `:where()` (especif
 --hub-fab-size-standard:      3.5rem;
 --hub-fab-size-large:         4.5rem;
 --hub-fab-border-radius:      50%;
---hub-fab-shadow:             var(--hub-sys-shadow-md);
---hub-fab-shadow-hover:       var(--hub-sys-shadow-lg);
---hub-fab-offset:             1rem;
---hub-fab-zindex:            1030;
+--hub-fab-shadow:             var(--hub-sys-shadow-md, 0 0.5rem 1rem rgba(0, 0, 0, 0.15));
+--hub-fab-shadow-hover:       var(--hub-sys-shadow-lg, 0 1rem 3rem rgba(0, 0, 0, 0.175));
+--hub-fab-offset:             var(--hub-ref-space-3, 1rem);
+--hub-fab-zindex:             var(--hub-sys-zindex-fixed, 1030);
 --hub-fab-transition:         box-shadow 0.2s ease, transform 0.15s ease;
+--hub-fab-extended-height:    3.5rem;
+--hub-fab-extended-radius:    1.75rem;
+--hub-fab-extended-padding-x: 1.25rem;
 
 /* Speed Dial */
 --hub-speed-dial-gap:         0.625rem;
---hub-speed-dial-zindex:     1030;
+--hub-speed-dial-zindex:      var(--hub-sys-zindex-fixed, 1030);
 --hub-speed-dial-animation:   0.2s ease;
 
 /* Panel del dropdown */
@@ -376,12 +393,29 @@ hub-button, [hubButton] {
 }
 ```
 
+### Añadir un color personalizado al FAB
+
+```scss
+@include hub.hub-fab-color('brand');
+```
+
+### Añadir un color personalizado al dropdown
+
+```scss
+// Borde de acento del panel
+@include hub.hub-dropdown-panel-color('brand');
+
+// Texto y hover del item
+@include hub.hub-dropdown-item-color('brand');
+```
+
 ### Mixins disponibles
 
 | Mixin | Contexto | Descripción |
 |---|---|---|
 | `hub-btn-variant-rules($bg, $color, $border, $hover-*, $active-*, …)` | dentro de un selector de variante `hub-button, [hubButton]` | Primitivo genérico — cada propiedad de apariencia como parámetro **con nombre** (sin `$type` posicional) |
 | `hub-btn-color-rules($type)` | bloque `hub-button, [hubButton]` | Registra un acento personalizado (`--hub-btn-accent` → `--hub-sys-color-$type`); las cinco apariencias derivan de él |
+| `hub-btn-theme($accent, $border-radius, $padding-x, $padding-y, $font-size)` | cualquier selector que contenga botones | Tematización por tokens en una llamada — todos los parámetros son opcionales y solo se emiten los que pases |
 | `hub-fab-color($type)` | raíz | Regla global `.hub-fab-{type}` |
 | `hub-dropdown-panel-color($type)` | raíz | Regla global de color para `hub-dropdown-panel` |
 | `hub-dropdown-panel-color-rules($type)` | dentro de selector `hub-dropdown-panel` | Solo propiedades CSS — tú eliges el selector |

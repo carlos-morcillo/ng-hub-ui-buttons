@@ -64,4 +64,82 @@ describe('HubFabComponent', () => {
 		fixture.detectChanges();
 		expect(el.style.getPropertyValue('--hub-fab-accent')).toBe('#ff0000');
 	});
+
+	it('emits fabClick once when the host is clicked', () => {
+		const emitted: void[] = [];
+		fixture.componentInstance.fabClick.subscribe((value) => emitted.push(value));
+
+		el.click();
+
+		expect(emitted.length).toBe(1);
+	});
+
+	it('does not emit fabClick when disabled', () => {
+		let emissions = 0;
+		fixture.componentInstance.fabClick.subscribe(() => emissions++);
+		ref.setInput('disabled', true);
+		fixture.detectChanges();
+
+		el.click();
+
+		expect(emissions).toBe(0);
+	});
+
+	/**
+	 * The FAB is a custom tag with projected content, so nothing about it is a control
+	 * unless it says so: without a role it is announced as plain text, and without a
+	 * tabindex no one reaches it without a pointer.
+	 */
+	describe('keyboard and assistive tech', () => {
+		it('announces itself as a button', () => {
+			expect(el.getAttribute('role')).toBe('button');
+		});
+
+		it('is in the tab order', () => {
+			expect(el.getAttribute('tabindex')).toBe('0');
+		});
+
+		it('leaves the tab order and reports aria-disabled when disabled', () => {
+			ref.setInput('disabled', true);
+			fixture.detectChanges();
+
+			expect(el.getAttribute('tabindex')).toBe('-1');
+			expect(el.getAttribute('aria-disabled')).toBe('true');
+		});
+
+		it('says nothing about aria-disabled while enabled', () => {
+			expect(el.getAttribute('aria-disabled')).toBeNull();
+		});
+
+		it('emits fabClick on Enter', () => {
+			let emissions = 0;
+			fixture.componentInstance.fabClick.subscribe(() => emissions++);
+
+			el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+			expect(emissions).toBe(1);
+		});
+
+		it('emits fabClick on Space and swallows the page scroll', () => {
+			let emissions = 0;
+			fixture.componentInstance.fabClick.subscribe(() => emissions++);
+			const event = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true });
+
+			el.dispatchEvent(event);
+
+			expect(emissions).toBe(1);
+			expect(event.defaultPrevented).toBe(true);
+		});
+
+		it('ignores Enter while disabled', () => {
+			let emissions = 0;
+			fixture.componentInstance.fabClick.subscribe(() => emissions++);
+			ref.setInput('disabled', true);
+			fixture.detectChanges();
+
+			el.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+
+			expect(emissions).toBe(0);
+		});
+	});
 });

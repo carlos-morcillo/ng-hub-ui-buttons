@@ -10,6 +10,11 @@ import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/butto
  * FAB that expands a stack of HubSpeedDialItemComponent children on click or hover.
  * Supports 4 expansion directions and all 9 FAB viewport positions.
  * Closes automatically on Escape key press.
+ *
+ * The hover trigger is watched on the host, not on the trigger button: the host box holds
+ * the button, the action items and the gap between them, so travelling from the trigger to
+ * an item never leaves it. On the button, that trip is a `mouseleave` and the menu is gone
+ * before the pointer arrives.
  */
 @Component({
 	selector: 'hub-speed-dial',
@@ -19,7 +24,9 @@ import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/butto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
 		class: 'hub-speed-dial',
-		'[class]': '_hostClass'
+		'[class]': '_hostClass',
+		'(mouseenter)': '_onHostEnter()',
+		'(mouseleave)': '_onHostLeave()'
 	}
 })
 export class HubSpeedDialComponent {
@@ -69,6 +76,14 @@ export class HubSpeedDialComponent {
 				)
 				.subscribe(() => this.close());
 		}
+	}
+
+	protected _onHostEnter(): void {
+		if (this.trigger() === 'hover') this.open();
+	}
+
+	protected _onHostLeave(): void {
+		if (this.trigger() === 'hover') this.close();
 	}
 
 	/** Toggle the speed dial open/closed. */

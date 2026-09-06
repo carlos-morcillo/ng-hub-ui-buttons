@@ -62,4 +62,58 @@ describe('HubSpeedDialComponent', () => {
 		const trigger: HTMLElement = fixture.nativeElement.querySelector('.hub-fab');
 		expect(trigger.style.getPropertyValue('--hub-fab-accent')).toBe('#ff0000');
 	});
+
+	/**
+	 * The items sit in a sibling column, one `--hub-speed-dial-gap` away from the trigger.
+	 * The browser fires `mouseleave` on the trigger button as soon as the pointer starts
+	 * that trip, and only on the host when it leaves the whole control — so the host is the
+	 * only boundary that still means "gone".
+	 */
+	describe('hover trigger', () => {
+		let host: HTMLElement;
+		let trigger: HTMLElement;
+
+		const enter = (target: HTMLElement) => target.dispatchEvent(new MouseEvent('mouseenter'));
+		const leave = (target: HTMLElement) => target.dispatchEvent(new MouseEvent('mouseleave'));
+
+		beforeEach(() => {
+			ref.setInput('trigger', 'hover');
+			fixture.detectChanges();
+			host = fixture.nativeElement;
+			trigger = host.querySelector('.hub-fab')!;
+		});
+
+		it('opens when the pointer enters the control', () => {
+			enter(host);
+
+			expect(component.isOpen()).toBe(true);
+		});
+
+		it('stays open while the pointer crosses from the trigger to the actions', () => {
+			enter(host);
+			fixture.detectChanges();
+
+			leave(trigger);
+
+			expect(component.isOpen()).toBe(true);
+		});
+
+		it('closes when the pointer leaves the control altogether', () => {
+			enter(host);
+			fixture.detectChanges();
+
+			leave(host);
+
+			expect(component.isOpen()).toBe(false);
+		});
+
+		it('ignores hover entirely under the click trigger', () => {
+			ref.setInput('trigger', 'click');
+			fixture.detectChanges();
+
+			enter(host);
+
+			expect(component.isOpen()).toBe(false);
+		});
+	});
 });

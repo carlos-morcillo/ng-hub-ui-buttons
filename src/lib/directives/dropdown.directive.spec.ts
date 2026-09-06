@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { OverlayRef } from 'ng-hub-ui-utils';
 import { HubDropdownDirective } from './dropdown.directive';
 
 @Component({
@@ -55,5 +56,33 @@ describe('HubDropdownDirective', () => {
 		directive.opened.subscribe(spy);
 		directive.open();
 		expect(spy).toHaveBeenCalledTimes(1);
+	});
+
+	/**
+	 * The panel closes on Escape, an outside click or a scroll — never on a backdrop, because
+	 * there is none. The overlay is created without `hasBackdrop`, so nothing dims or blocks
+	 * the page behind an open menu. Pinned here because the READMEs and the documentation site
+	 * promised a backdrop close for eleven versions while the directive registered a handler
+	 * the overlay could never call: with no backdrop element there is no backdrop click.
+	 */
+	describe('backdrop', () => {
+		it('should mount no backdrop element while open', () => {
+			directive.open();
+
+			expect(document.querySelector('.hub-overlay-backdrop')).toBeNull();
+
+			directive.close();
+		});
+
+		it('should register no backdrop-click handler', () => {
+			const onBackdropClick = vi.spyOn(OverlayRef.prototype, 'onBackdropClick');
+
+			directive.open();
+
+			expect(onBackdropClick).not.toHaveBeenCalled();
+
+			directive.close();
+			onBackdropClick.mockRestore();
+		});
 	});
 });

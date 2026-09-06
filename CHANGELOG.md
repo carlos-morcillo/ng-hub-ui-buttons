@@ -1,5 +1,97 @@
 # ng-hub-ui-buttons Changelog
 
+## [22.11.1] - 2026-09-06
+
+### Added
+
+- **`FUNCTIONALITIES.md`**, the coverage table the rest of the family ships: what the library
+  does, family by family, and which of it a live example actually demonstrates. Until now the
+  only such checklist lived in the documentation site, where a consumer reading the package on
+  npm never sees it.
+
+### Changed
+
+- Comments that had fallen behind the code now match it: `icon` on `hub-dropdown-item` and
+  `hub-speed-dial-item` is a CSS class, not a character or a ligature, and the SCSS headers
+  write the current `hub-button, [hubButton]` selector instead of the pre-22.2.0 spelling.
+
+- **`[hubDropdown]` no longer promises a backdrop it never had.** The README and the
+  documentation site listed "backdrop close" among the ways the panel closes, which sent
+  anyone counting on a dimmed, click-blocking layer behind an open menu looking for a
+  variable to tint. There is none: the overlay is created without `hasBackdrop`, so no such
+  element is ever built and the `onBackdropClick` callback the directive registered could
+  never fire. What closes the panel on an outside click is a document-level listener, and
+  that is what the documentation now says. The dead registration is gone.
+
+### Fixed
+
+- **`<hub-fab>` actually emits `fabClick`.** The output was declared and documented but
+  nothing ever emitted it, so the one event the component offers never fired and the only
+  way to react to a FAB was to bind `(click)` on it — the very thing the output exists to
+  spare you. Pressing the FAB now emits it once, and never while `disabled`, which is
+  re-checked in code because `pointer-events: none` does not stop a programmatic click.
+
+- **`@use 'ng-hub-ui-buttons/styles'` resolves.** The stylesheets have always shipped in
+  the package, but the manifest declared no subpath for them, so tooling that honours the
+  `exports` map could not reach the mixin API the README teaches; the workaround was to
+  reach into `node_modules` by physical path.
+
+- **`<hub-fab>` is reachable without a pointer.** The FAB is a custom tag with projected
+  content, so nothing about it was a control: no `role`, no place in the tab order, no
+  keyboard activation, and `disabled` said so only in CSS. Screen-reader users met an
+  unannounced blob and keyboard users could not reach it at all. It now advertises
+  `role="button"`, carries `tabindex="0"` (`-1` while disabled, alongside
+  `aria-disabled="true"`) and activates on Enter and Space — the same treatment
+  `<hub-button>`'s element form got in 22.8.0. Because it now reports as a button, do not
+  nest a `<hub-fab>` inside another interactive element, and give it an `aria-label` when
+  all it contains is an icon.
+
+- **`trigger="hover"` on `<hub-speed-dial>` lets the pointer reach the items.** The
+  enter/leave pair sat on the trigger button, and the items render in a sibling column one
+  `--hub-speed-dial-gap` away: starting the trip fired `mouseleave`, which closed the dial
+  before the pointer arrived, so in hover mode no item could ever be pressed. Both handlers
+  now sit on the host, whose box holds the button, the items and the gap between them.
+
+- **`trigger="hover"` on `[hubDropdown]` lets the pointer reach the panel.** The panel is
+  attached at body level and offset from its trigger, so leaving the trigger was closing the
+  dropdown while the pointer was still crossing ground that belongs to neither. Leaving now
+  only starts a short grace period, which arriving on the panel cancels; the countdown
+  starts again when the pointer leaves the panel too.
+
+- **`closeOnSelect="false"` actually keeps the panel open.** The click-outside listener
+  excluded the trigger and nothing else, and the panel is not a descendant of its trigger —
+  it hangs off the body — so every click on a menu item read as a click outside and closed
+  the dropdown whatever the input said. The option now does what it documents, which is what
+  a multi-select menu, a filter panel or a form inside a dropdown is built on.
+
+- **The bare boolean attribute compiles beyond `<hub-button>`.** 22.11.0 fixed `disabled` and
+  `loading` on the button but left the same trap everywhere else: `<hub-fab disabled>`,
+  `<hub-speed-dial-item disabled>`, `<hub-dropdown-item selected>` and `closeOnSelect` on
+  `[hubDropdown]` all failed with `TS2322: Type 'string' is not assignable to type
+  'boolean'`, because an attribute written without a value passes the empty string. `extended`
+  and `collapseOnScroll` on the FAB were in the same state. All of them now use
+  `booleanAttribute`, so the bare form, `=""` and `[bound]="true"` are interchangeable.
+  Additive: every binding that compiled before still compiles.
+
+- **The documentation describes the library that ships.** Both READMEs promised defaults and
+  behaviour the code no longer has: the speed-dial item's `color` documented as defaulting to
+  `primary` when it defaults to `default`, `collapseOnScroll` described as hiding the label on
+  scroll and expanding on stop when it collapses past 50px and expands again near the top, and
+  the pre-22.3.0 literals for the button padding, gap, transition and disabled opacity, which
+  have read from the `--hub-ref-*` / `--hub-sys-*` tokens since that release — so anyone
+  copying the block to retune a button was starting from values the library abandoned. The FAB
+  table omitted `extended` and both content slots, the speed-dial table omitted `size`,
+  `trigger`, `opened` and `closed`, and the mixin table omitted `hub-btn-theme`, which the
+  public styles entry has forwarded since 22.9.0. The Spanish README also regained the two
+  theming sections it had lost.
+
+- **`BREAKING_CHANGES.md` names every breaking release, not one of four.** It documented only
+  22.1.0, so a consumer upgrading across 22.2.0 (the `hub-btn` → `hub-button` and `[hubBtn]` →
+  `[hubButton]` selector renames, plus `--hub-btn-*` → `--hub-button-*` on the shell tokens),
+  22.4.0 (the `z-index` → `zindex` token renames) or 22.6.0 (the `iconOnly` removal) met
+  silence. None of those three fails at compile time: the markup, the stylesheet and the
+  overrides simply stop being read, which is the case a changelog has to cover.
+
 ## [22.11.0] - 2026-09-03
 
 ### Fixed

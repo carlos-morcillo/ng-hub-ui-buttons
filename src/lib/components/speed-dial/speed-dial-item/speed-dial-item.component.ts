@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, input, output } from '@angular/core';
 import { resolveHubAccent } from 'ng-hub-ui-utils';
 import { HubSemanticColor } from '../../../models/button.types';
 
@@ -14,12 +14,19 @@ import { HubSemanticColor } from '../../../models/button.types';
 	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class HubSpeedDialItemComponent {
-	/** Icon character or ligature string displayed in the action button. */
+	/** CSS class of the icon rendered in the action button (e.g. `'bi bi-pencil'`). */
 	icon = input.required<string>();
 	/** Tooltip label shown next to the action button. */
 	label = input('');
 	color = input<HubSemanticColor | 'default'>('default');
-	disabled = input(false);
+	/**
+	 * Makes the action button inert.
+	 *
+	 * Transformed, so the bare HTML form works: `<hub-speed-dial-item disabled>` passes the
+	 * empty string an attribute without a value carries, which an untransformed
+	 * `input(false)` rejects at compile time.
+	 */
+	disabled = input(false, { transform: booleanAttribute });
 	itemClick = output<void>();
 
 	/**

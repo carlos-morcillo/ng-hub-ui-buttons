@@ -4,6 +4,7 @@ import {
 	DestroyRef,
 	OnInit,
 	ViewEncapsulation,
+	booleanAttribute,
 	inject,
 	input,
 	output,
@@ -20,6 +21,15 @@ import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/butto
  * Supports circular and extended (pill with label) variants.
  * When collapseOnScroll is true, an extended FAB collapses to icon-only after 50px scroll.
  * Uses inset-inline-* / inset-block-* CSS logical properties for RTL support.
+ *
+ * The host element *is* the control — a component cannot swap its own tag for a native
+ * `<button>` — so it self-advertises `role="button"`, a focusable `tabindex` and
+ * Enter/Space activation to stay reachable without a pointer.
+ *
+ * **Accessibility caveat:** because it reports `role="button"`, a `<hub-fab>` must not be
+ * nested inside another interactive element, which would produce an invalid
+ * nested-interactive tree. Give it an accessible name (`aria-label`) when the projected
+ * content is only an icon.
  */
 @Component({
 	selector: 'hub-fab',
@@ -29,20 +39,32 @@ import { HubFabPosition, HubFabSize, HubSemanticColor } from '../../models/butto
 	changeDetection: ChangeDetectionStrategy.OnPush,
 	host: {
 		class: 'hub-fab',
+		role: 'button',
 		'[class]': '_hostClass',
-		'[style.--hub-fab-accent]': '_accent'
+		'[style.--hub-fab-accent]': '_accent',
+		'[attr.tabindex]': '_tabindex',
+		'[attr.aria-disabled]': '_ariaDisabled',
+		'(click)': '_handleClick()',
+		'(keydown)': '_onKeydown($event)'
 	},
 	encapsulation: ViewEncapsulation.None
 })
 export class HubFabComponent implements OnInit {
 	color = input<HubSemanticColor>('primary');
 	size = input<HubFabSize>('standard');
-	extended = input(false);
+	/**
+	 * Renders the pill variant with a projected label.
+	 *
+	 * Transformed, so the bare HTML form works: `<hub-fab extended>` passes the empty
+	 * string an attribute without a value carries, which an untransformed `input(false)`
+	 * rejects at compile time.
+	 */
+	extended = input(false, { transform: booleanAttribute });
 	/** Fixed viewport position. 9-slot grid including center. */
 	position = input<HubFabPosition>('bottom-end');
 	/** When true, collapses an extended FAB to icon-only on page scroll. */
-	collapseOnScroll = input(false);
-	disabled = input(false);
+	collapseOnScroll = input(false, { transform: booleanAttribute });
+	disabled = input(false, { transform: booleanAttribute });
 	fabClick = output<void>();
 
 	/** Collapse state driven by scroll — only active when extended + collapseOnScroll. */
@@ -74,6 +96,53 @@ export class HubFabComponent implements OnInit {
 	 */
 	protected get _accent(): string | null {
 		return resolveHubAccent(this.color());
+	}
+
+	/**
+	 * Keeps the FAB in the tab order (`0`), or takes it out while disabled (`-1`), the
+	 * way a native button drops out of it — `pointer-events: none` only hides it from
+	 * the pointer.
+	 */
+	protected get _tabindex(): number {
+		return this.disabled() ? -1 : 0;
+	}
+
+	/**
+	 * Conveys the disabled state to assistive tech, which a custom host tag cannot
+	 * express through the native `disabled` attribute.
+	 */
+	protected get _ariaDisabled(): 'true' | null {
+		return this.disabled() ? 'true' : null;
+	}
+
+	/**
+	 * The host element *is* the button surface — consumers project an icon into it,
+	 * not a control — so activation is read here. `disabled` is re-checked in code
+	 * because the `pointer-events: none` that backs it is a style: a programmatic
+	 * `click()` (or a test) reaches the listener regardless.
+	 */
+	protected _handleClick(): void {
+		if (this.disabled()) return;
+		this.fabClick.emit();
+	}
+
+	/**
+	 * Emulates native button keyboard activation: Enter or Space triggers a click.
+	 * Space additionally calls `preventDefault()` to stop the page from scrolling.
+	 * @param event The originating keyboard event.
+	 */
+	protected _onKeydown(event: KeyboardEvent): void {
+		if (this.disabled()) return;
+
+		const isSpace = event.key === ' ' || event.key === 'Spacebar';
+
+		if (event.key === 'Enter' || isSpace) {
+			if (isSpace) {
+				event.preventDefault();
+			}
+
+			(event.currentTarget as HTMLElement).click();
+		}
 	}
 
 	ngOnInit(): void {

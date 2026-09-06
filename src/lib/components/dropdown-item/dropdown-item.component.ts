@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, booleanAttribute, input, output } from '@angular/core';
 import { resolveHubAccent } from 'ng-hub-ui-utils';
 import { HubSemanticColor } from '../../models/button.types';
 
@@ -20,11 +20,18 @@ import { HubSemanticColor } from '../../models/button.types';
 })
 export class HubDropdownItemComponent {
 	color = input<HubSemanticColor | 'default'>('default');
-	/** Optional icon character or ligature displayed before the label. */
+	/** Optional CSS class of the icon rendered before the label (e.g. `'bi bi-pencil'`). */
 	icon = input<string>();
-	disabled = input(false);
+	/**
+	 * Makes the item inert.
+	 *
+	 * Transformed, so the bare HTML form works: `<hub-dropdown-item disabled>` passes the
+	 * empty string an attribute without a value carries, which an untransformed
+	 * `input(false)` rejects at compile time. Same for {@link selected}.
+	 */
+	disabled = input(false, { transform: booleanAttribute });
 	/** Shows a checkmark indicator when selected. */
-	selected = input(false);
+	selected = input(false, { transform: booleanAttribute });
 	itemClick = output<void>();
 
 	protected get _hostClass(): string {

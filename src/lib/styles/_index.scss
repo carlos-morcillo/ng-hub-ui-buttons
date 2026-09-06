@@ -6,7 +6,7 @@
 //
 // Then call any mixin to register additional semantic colors:
 //
-//   hub-btn, [hubBtn] { @include hub.hub-btn-color-rules('brand'); }
+//   hub-button, [hubButton] { @include hub.hub-btn-color-rules('brand'); }
 //   @include hub.hub-fab-color('brand');
 //   @include hub.hub-dropdown-panel-color('brand');
 //   @include hub.hub-dropdown-item-color('brand');

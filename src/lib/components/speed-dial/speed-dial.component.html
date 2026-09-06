@@ -3,8 +3,6 @@
 	[class]="'hub-fab-' + color() + ' hub-fab-' + size()"
 	[style.--hub-fab-accent]="_accent"
 	(click)="trigger() === 'click' && toggle()"
-	(mouseenter)="trigger() === 'hover' && open()"
-	(mouseleave)="trigger() === 'hover' && close()"
 	type="button"
 	[attr.aria-expanded]="isOpen()"
 	aria-haspopup="true"
