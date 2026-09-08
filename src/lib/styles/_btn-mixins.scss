@@ -10,7 +10,7 @@
 // The button reads a single per-component input, `--hub-btn-accent`, and derives
 // its whole role family from it AT RUNTIME (see button.component.scss):
 //
-//   --hub-btn-accent-emphasis = color-mix(in oklch, accent 80%, ink)
+//   --hub-btn-accent-emphasis = the accent with its luminosity capped at .45
 //   --hub-btn-accent-subtle   = color-mix(in oklch, accent 12%, surface)
 //   --hub-btn-accent-on       = grayscale contrast flip of the accent
 //

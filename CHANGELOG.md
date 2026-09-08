@@ -1,5 +1,16 @@
 # ng-hub-ui-buttons Changelog
 
+## 22.12.0 — 2026-09-08
+
+### Fixed
+
+- **The label of an outline, soft, ghost or link button was illegible on a pale accent.**
+  `--hub-btn-accent-emphasis` was `color-mix(accent 80%, ink)`, the same derivation
+  `ng-hub-ui-ds` used and the same defect: an outline button in the default warning
+  measured **2.5:1** against the page, a link button in the default info **2.9:1**. The
+  slot now caps the accent's luminosity — `oklch(from var(--hub-btn-accent) min(l, .45) c
+  h)` — so a dark accent is untouched and a light one becomes legible without losing its
+  hue. Matches `ng-hub-ui-ds` 22.11.0.
 ## [22.11.2] - 2026-09-08
 
 ### Changed

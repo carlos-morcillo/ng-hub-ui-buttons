@@ -33,7 +33,18 @@
 	// emphasis / subtle / on are then derived here automatically — the open
 	// path never touches the @each.
 	--hub-btn-accent: var(--hub-sys-color-primary, #0d6efd);
-	--hub-btn-accent-emphasis: color-mix(in oklch, var(--hub-btn-accent) 80%, var(--hub-sys-color-ink, #212529));
+	/**
+	 * The emphasis slot carries the label of an outline, soft, ghost or link button, so
+	 * its luminosity is capped rather than mixed toward the ink.
+	 *
+	 * A percentage cannot darken a pale accent: an outline button in the default warning
+	 * measured 2.5:1 against the page, and a link button in the default info 2.9:1. Both
+	 * are shipped colours, so the label was unreadable out of the box and no consumer
+	 * could reach the formula. `min(l, .45)` leaves a dark accent untouched and pulls a
+	 * light one down to where it can carry a letter, keeping hue and chroma. Matches the
+	 * `-emphasis` derivation in ng-hub-ui-ds, which had the same defect.
+	 */
+	--hub-btn-accent-emphasis: oklch(from var(--hub-btn-accent) min(l, 0.45) c h);
 	--hub-btn-accent-subtle: color-mix(in oklch, var(--hub-btn-accent) 12%, var(--hub-sys-surface-page, #ffffff));
 	// Contrast / on-color: grayscale flip driven by the accent's own lightness.
 	// Dark accents (L < .62) resolve to white text; light accents to near-black.
