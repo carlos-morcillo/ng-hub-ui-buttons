@@ -1,6 +1,6 @@
 # ng-hub-ui-buttons Changelog
 
-## 22.12.0 — 2026-09-08
+## [22.12.0] - 2026-09-08
 
 ### Fixed
 
